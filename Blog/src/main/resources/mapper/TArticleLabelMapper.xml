@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.blog.mapper.TArticleLabelMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.blog.model.TArticleLabel">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ARTICLE_ID" jdbcType="BIGINT" property="articleId" />
+    <result column="LABEL_ID" jdbcType="BIGINT" property="labelId" />
+    <result column="IF_HAND" jdbcType="TINYINT" property="ifHand" />
+    <result column="VALUE" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, ARTICLE_ID, LABEL_ID, IF_HAND, VALUE
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.blog.model.TArticleLabelExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_article_label
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_article_label
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_article_label
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.blog.model.TArticleLabelExample">
+    delete from t_article_label
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.blog.model.TArticleLabel">
+    insert into t_article_label (ID, ARTICLE_ID, LABEL_ID, 
+      IF_HAND, VALUE)
+    values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, #{labelId,jdbcType=BIGINT}, 
+      #{ifHand,jdbcType=TINYINT}, #{value,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.blog.model.TArticleLabel">
+    insert into t_article_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="articleId != null">
+        ARTICLE_ID,
+      </if>
+      <if test="labelId != null">
+        LABEL_ID,
+      </if>
+      <if test="ifHand != null">
+        IF_HAND,
+      </if>
+      <if test="value != null">
+        VALUE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="labelId != null">
+        #{labelId,jdbcType=BIGINT},
+      </if>
+      <if test="ifHand != null">
+        #{ifHand,jdbcType=TINYINT},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.blog.model.TArticleLabelExample" resultType="java.lang.Long">
+    select count(*) from t_article_label
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_article_label
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.articleId != null">
+        ARTICLE_ID = #{record.articleId,jdbcType=BIGINT},
+      </if>
+      <if test="record.labelId != null">
+        LABEL_ID = #{record.labelId,jdbcType=BIGINT},
+      </if>
+      <if test="record.ifHand != null">
+        IF_HAND = #{record.ifHand,jdbcType=TINYINT},
+      </if>
+      <if test="record.value != null">
+        VALUE = #{record.value,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_article_label
+    set ID = #{record.id,jdbcType=BIGINT},
+      ARTICLE_ID = #{record.articleId,jdbcType=BIGINT},
+      LABEL_ID = #{record.labelId,jdbcType=BIGINT},
+      IF_HAND = #{record.ifHand,jdbcType=TINYINT},
+      VALUE = #{record.value,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.blog.model.TArticleLabel">
+    update t_article_label
+    <set>
+      <if test="articleId != null">
+        ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="labelId != null">
+        LABEL_ID = #{labelId,jdbcType=BIGINT},
+      </if>
+      <if test="ifHand != null">
+        IF_HAND = #{ifHand,jdbcType=TINYINT},
+      </if>
+      <if test="value != null">
+        VALUE = #{value,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.blog.model.TArticleLabel">
+    update t_article_label
+    set ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      LABEL_ID = #{labelId,jdbcType=BIGINT},
+      IF_HAND = #{ifHand,jdbcType=TINYINT},
+      VALUE = #{value,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

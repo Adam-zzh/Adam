@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.admin.mapper.TDictMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.admin.model.TDict">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="DICT_CODE" jdbcType="VARCHAR" property="dictCode" />
+    <result column="DICT_LABEL" jdbcType="VARCHAR" property="dictLabel" />
+    <result column="CATEGORY_CODE" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="CATEGORY_LABEL" jdbcType="VARCHAR" property="categoryLabel" />
+    <result column="SEQUENCE" jdbcType="INTEGER" property="sequence" />
+    <result column="DATE_TYPE" jdbcType="VARCHAR" property="dateType" />
+    <result column="CREATE_ID" jdbcType="BIGINT" property="createId" />
+    <result column="UPDATE_ID" jdbcType="BIGINT" property="updateId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="VERSION" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <resultMap id="DictCategoryResultMap" type="com.huamiao.admin.dto.DictCategory">
+    <result column="CATEGORY_CODE" jdbcType="VARCHAR" property="categoryCode"/>
+    <result column="CATEGORY_LABEL" jdbcType="VARCHAR" property="categoryLabel"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, DICT_CODE, DICT_LABEL, CATEGORY_CODE, CATEGORY_LABEL, SEQUENCE, DATE_TYPE, CREATE_ID, 
+    UPDATE_ID, CREATE_TIME, UPDATE_TIME, VERSION
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.admin.model.TDictExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_dict
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="queryDictCategoryList" parameterType="java.lang.Long" resultMap="DictCategoryResultMap">
+        select
+        DISTINCT CATEGORY_CODE, CATEGORY_LABEL
+        from t_dict AS dict
+        GROUP BY dict.CATEGORY_CODE
+        ORDER BY dict.CREATE_TIME
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_dict
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.admin.model.TDictExample">
+    delete from t_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.admin.model.TDict">
+    insert into t_dict (ID, DICT_CODE, DICT_LABEL, 
+      CATEGORY_CODE, CATEGORY_LABEL, SEQUENCE, 
+      DATE_TYPE, CREATE_ID, UPDATE_ID, 
+      CREATE_TIME, UPDATE_TIME, VERSION
+      )
+    values (#{id,jdbcType=BIGINT}, #{dictCode,jdbcType=VARCHAR}, #{dictLabel,jdbcType=VARCHAR}, 
+      #{categoryCode,jdbcType=VARCHAR}, #{categoryLabel,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER}, 
+      #{dateType,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{updateId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.admin.model.TDict">
+    insert into t_dict
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="dictCode != null">
+        DICT_CODE,
+      </if>
+      <if test="dictLabel != null">
+        DICT_LABEL,
+      </if>
+      <if test="categoryCode != null">
+        CATEGORY_CODE,
+      </if>
+      <if test="categoryLabel != null">
+        CATEGORY_LABEL,
+      </if>
+      <if test="sequence != null">
+        SEQUENCE,
+      </if>
+      <if test="dateType != null">
+        DATE_TYPE,
+      </if>
+      <if test="createId != null">
+        CREATE_ID,
+      </if>
+      <if test="updateId != null">
+        UPDATE_ID,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="version != null">
+        VERSION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="dictCode != null">
+        #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLabel != null">
+        #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLabel != null">
+        #{categoryLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="sequence != null">
+        #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="dateType != null">
+        #{dateType,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="updateId != null">
+        #{updateId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.admin.model.TDictExample" resultType="java.lang.Long">
+    select count(*) from t_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_dict
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.dictCode != null">
+        DICT_CODE = #{record.dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dictLabel != null">
+        DICT_LABEL = #{record.dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryCode != null">
+        CATEGORY_CODE = #{record.categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryLabel != null">
+        CATEGORY_LABEL = #{record.categoryLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sequence != null">
+        SEQUENCE = #{record.sequence,jdbcType=INTEGER},
+      </if>
+      <if test="record.dateType != null">
+        DATE_TYPE = #{record.dateType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createId != null">
+        CREATE_ID = #{record.createId,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateId != null">
+        UPDATE_ID = #{record.updateId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.version != null">
+        VERSION = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_dict
+    set ID = #{record.id,jdbcType=BIGINT},
+      DICT_CODE = #{record.dictCode,jdbcType=VARCHAR},
+      DICT_LABEL = #{record.dictLabel,jdbcType=VARCHAR},
+      CATEGORY_CODE = #{record.categoryCode,jdbcType=VARCHAR},
+      CATEGORY_LABEL = #{record.categoryLabel,jdbcType=VARCHAR},
+      SEQUENCE = #{record.sequence,jdbcType=INTEGER},
+      DATE_TYPE = #{record.dateType,jdbcType=VARCHAR},
+      CREATE_ID = #{record.createId,jdbcType=BIGINT},
+      UPDATE_ID = #{record.updateId,jdbcType=BIGINT},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      VERSION = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.admin.model.TDict">
+    update t_dict
+    <set>
+      <if test="dictCode != null">
+        DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLabel != null">
+        DICT_LABEL = #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        CATEGORY_CODE = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLabel != null">
+        CATEGORY_LABEL = #{categoryLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="sequence != null">
+        SEQUENCE = #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="dateType != null">
+        DATE_TYPE = #{dateType,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        CREATE_ID = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="updateId != null">
+        UPDATE_ID = #{updateId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        VERSION = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.admin.model.TDict">
+    update t_dict
+    set DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+      DICT_LABEL = #{dictLabel,jdbcType=VARCHAR},
+      CATEGORY_CODE = #{categoryCode,jdbcType=VARCHAR},
+      CATEGORY_LABEL = #{categoryLabel,jdbcType=VARCHAR},
+      SEQUENCE = #{sequence,jdbcType=INTEGER},
+      DATE_TYPE = #{dateType,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=BIGINT},
+      UPDATE_ID = #{updateId,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      VERSION = #{version,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

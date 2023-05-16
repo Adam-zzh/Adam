@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.blog.mapper.TUserMirMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.blog.model.TUserMir">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="USER_TYPE" jdbcType="TINYINT" property="userType" />
+    <result column="USER_EMAIL" jdbcType="VARCHAR" property="userEmail" />
+    <result column="USER_PROFILE_PHOTO" jdbcType="VARCHAR" property="userProfilePhoto" />
+    <result column="USER_PHONE" jdbcType="VARCHAR" property="userPhone" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lOGIN_TIME" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="RMK" jdbcType="VARCHAR" property="rmk" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, USER_NAME, ACCOUNT, PASSWORD, USER_TYPE, USER_EMAIL, USER_PROFILE_PHOTO, USER_PHONE, 
+    CREATE_TIME, lOGIN_TIME, RMK, STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.blog.model.TUserMirExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user_mir
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_mir
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_user_mir
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.blog.model.TUserMirExample">
+    delete from t_user_mir
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.blog.model.TUserMir">
+    insert into t_user_mir (ID, USER_NAME, ACCOUNT, 
+      PASSWORD, USER_TYPE, USER_EMAIL, 
+      USER_PROFILE_PHOTO, USER_PHONE, CREATE_TIME, 
+      lOGIN_TIME, RMK, STATUS
+      )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, #{userEmail,jdbcType=VARCHAR}, 
+      #{userProfilePhoto,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{loginTime,jdbcType=TIMESTAMP}, #{rmk,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.blog.model.TUserMir">
+    insert into t_user_mir
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="userType != null">
+        USER_TYPE,
+      </if>
+      <if test="userEmail != null">
+        USER_EMAIL,
+      </if>
+      <if test="userProfilePhoto != null">
+        USER_PROFILE_PHOTO,
+      </if>
+      <if test="userPhone != null">
+        USER_PHONE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="loginTime != null">
+        lOGIN_TIME,
+      </if>
+      <if test="rmk != null">
+        RMK,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=TINYINT},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userProfilePhoto != null">
+        #{userProfilePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null">
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.blog.model.TUserMirExample" resultType="java.lang.Long">
+    select count(*) from t_user_mir
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_user_mir
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userName != null">
+        USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null">
+        ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null">
+        USER_TYPE = #{record.userType,jdbcType=TINYINT},
+      </if>
+      <if test="record.userEmail != null">
+        USER_EMAIL = #{record.userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userProfilePhoto != null">
+        USER_PROFILE_PHOTO = #{record.userProfilePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPhone != null">
+        USER_PHONE = #{record.userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.loginTime != null">
+        lOGIN_TIME = #{record.loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rmk != null">
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_user_mir
+    set ID = #{record.id,jdbcType=BIGINT},
+      USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      USER_TYPE = #{record.userType,jdbcType=TINYINT},
+      USER_EMAIL = #{record.userEmail,jdbcType=VARCHAR},
+      USER_PROFILE_PHOTO = #{record.userProfilePhoto,jdbcType=VARCHAR},
+      USER_PHONE = #{record.userPhone,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      lOGIN_TIME = #{record.loginTime,jdbcType=TIMESTAMP},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.blog.model.TUserMir">
+    update t_user_mir
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        USER_TYPE = #{userType,jdbcType=TINYINT},
+      </if>
+      <if test="userEmail != null">
+        USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userProfilePhoto != null">
+        USER_PROFILE_PHOTO = #{userProfilePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        USER_PHONE = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        lOGIN_TIME = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null">
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.blog.model.TUserMir">
+    update t_user_mir
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      ACCOUNT = #{account,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      USER_TYPE = #{userType,jdbcType=TINYINT},
+      USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      USER_PROFILE_PHOTO = #{userProfilePhoto,jdbcType=VARCHAR},
+      USER_PHONE = #{userPhone,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      lOGIN_TIME = #{loginTime,jdbcType=TIMESTAMP},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.blog.mapper.TArticleMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.blog.model.TArticle">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="VIEW_NUM" jdbcType="INTEGER" property="viewNum" />
+    <result column="LIKE_NUM" jdbcType="INTEGER" property="likeNum" />
+    <result column="IF_TOP" jdbcType="INTEGER" property="ifTop" />
+    <result column="CRE_ID" jdbcType="BIGINT" property="creId" />
+    <result column="CRE_TIME" jdbcType="TIMESTAMP" property="creTime" />
+    <result column="UPD_ID" jdbcType="BIGINT" property="updId" />
+    <result column="UPD_TIME" jdbcType="TIMESTAMP" property="updTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.huamiao.blog.model.TArticle">
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, TITLE, VIEW_NUM, LIKE_NUM, IF_TOP, CRE_ID, CRE_TIME, UPD_ID, UPD_TIME
+  </sql>
+  <sql id="Blob_Column_List">
+    CONTENT
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.huamiao.blog.model.TArticleExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.huamiao.blog.model.TArticleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_article
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_article
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.blog.model.TArticleExample">
+    delete from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.blog.model.TArticle">
+    insert into t_article (ID, TITLE, VIEW_NUM, 
+      LIKE_NUM, IF_TOP, CRE_ID, 
+      CRE_TIME, UPD_ID, UPD_TIME, 
+      CONTENT)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{viewNum,jdbcType=INTEGER}, 
+      #{likeNum,jdbcType=INTEGER}, #{ifTop,jdbcType=INTEGER}, #{creId,jdbcType=BIGINT}, 
+      #{creTime,jdbcType=TIMESTAMP}, #{updId,jdbcType=BIGINT}, #{updTime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.blog.model.TArticle">
+    insert into t_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="viewNum != null">
+        VIEW_NUM,
+      </if>
+      <if test="likeNum != null">
+        LIKE_NUM,
+      </if>
+      <if test="ifTop != null">
+        IF_TOP,
+      </if>
+      <if test="creId != null">
+        CRE_ID,
+      </if>
+      <if test="creTime != null">
+        CRE_TIME,
+      </if>
+      <if test="updId != null">
+        UPD_ID,
+      </if>
+      <if test="updTime != null">
+        UPD_TIME,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="viewNum != null">
+        #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="ifTop != null">
+        #{ifTop,jdbcType=INTEGER},
+      </if>
+      <if test="creId != null">
+        #{creId,jdbcType=BIGINT},
+      </if>
+      <if test="creTime != null">
+        #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updId != null">
+        #{updId,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.blog.model.TArticleExample" resultType="java.lang.Long">
+    select count(*) from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_article
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null">
+        TITLE = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewNum != null">
+        VIEW_NUM = #{record.viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.likeNum != null">
+        LIKE_NUM = #{record.likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.ifTop != null">
+        IF_TOP = #{record.ifTop,jdbcType=INTEGER},
+      </if>
+      <if test="record.creId != null">
+        CRE_ID = #{record.creId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creTime != null">
+        CRE_TIME = #{record.creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updId != null">
+        UPD_ID = #{record.updId,jdbcType=BIGINT},
+      </if>
+      <if test="record.updTime != null">
+        UPD_TIME = #{record.updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_article
+    set ID = #{record.id,jdbcType=BIGINT},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      VIEW_NUM = #{record.viewNum,jdbcType=INTEGER},
+      LIKE_NUM = #{record.likeNum,jdbcType=INTEGER},
+      IF_TOP = #{record.ifTop,jdbcType=INTEGER},
+      CRE_ID = #{record.creId,jdbcType=BIGINT},
+      CRE_TIME = #{record.creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{record.updId,jdbcType=BIGINT},
+      UPD_TIME = #{record.updTime,jdbcType=TIMESTAMP},
+      CONTENT = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_article
+    set ID = #{record.id,jdbcType=BIGINT},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      VIEW_NUM = #{record.viewNum,jdbcType=INTEGER},
+      LIKE_NUM = #{record.likeNum,jdbcType=INTEGER},
+      IF_TOP = #{record.ifTop,jdbcType=INTEGER},
+      CRE_ID = #{record.creId,jdbcType=BIGINT},
+      CRE_TIME = #{record.creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{record.updId,jdbcType=BIGINT},
+      UPD_TIME = #{record.updTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.blog.model.TArticle">
+    update t_article
+    <set>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="viewNum != null">
+        VIEW_NUM = #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="likeNum != null">
+        LIKE_NUM = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="ifTop != null">
+        IF_TOP = #{ifTop,jdbcType=INTEGER},
+      </if>
+      <if test="creId != null">
+        CRE_ID = #{creId,jdbcType=BIGINT},
+      </if>
+      <if test="creTime != null">
+        CRE_TIME = #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updId != null">
+        UPD_ID = #{updId,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        UPD_TIME = #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.huamiao.blog.model.TArticle">
+    update t_article
+    set TITLE = #{title,jdbcType=VARCHAR},
+      VIEW_NUM = #{viewNum,jdbcType=INTEGER},
+      LIKE_NUM = #{likeNum,jdbcType=INTEGER},
+      IF_TOP = #{ifTop,jdbcType=INTEGER},
+      CRE_ID = #{creId,jdbcType=BIGINT},
+      CRE_TIME = #{creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{updId,jdbcType=BIGINT},
+      UPD_TIME = #{updTime,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.blog.model.TArticle">
+    update t_article
+    set TITLE = #{title,jdbcType=VARCHAR},
+      VIEW_NUM = #{viewNum,jdbcType=INTEGER},
+      LIKE_NUM = #{likeNum,jdbcType=INTEGER},
+      IF_TOP = #{ifTop,jdbcType=INTEGER},
+      CRE_ID = #{creId,jdbcType=BIGINT},
+      CRE_TIME = #{creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{updId,jdbcType=BIGINT},
+      UPD_TIME = #{updTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

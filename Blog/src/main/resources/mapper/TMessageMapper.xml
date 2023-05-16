@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.blog.mapper.TMessageMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.blog.model.TMessage">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="SOURCE_ID" jdbcType="BIGINT" property="sourceId" />
+    <result column="TARGET_ID" jdbcType="BIGINT" property="targetId" />
+    <result column="IF_READ" jdbcType="TINYINT" property="ifRead" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="CRE_ID" jdbcType="BIGINT" property="creId" />
+    <result column="CRE_TIME" jdbcType="TIMESTAMP" property="creTime" />
+    <result column="UPD_ID" jdbcType="BIGINT" property="updId" />
+    <result column="UPD_TIME" jdbcType="TIMESTAMP" property="updTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, SOURCE_ID, TARGET_ID, IF_READ, TITLE, CONTENT, TYPE, CRE_ID, CRE_TIME, UPD_ID, 
+    UPD_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.blog.model.TMessageExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_message
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_message
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.blog.model.TMessageExample">
+    delete from t_message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.blog.model.TMessage">
+    insert into t_message (ID, SOURCE_ID, TARGET_ID, 
+      IF_READ, TITLE, CONTENT, 
+      TYPE, CRE_ID, CRE_TIME, 
+      UPD_ID, UPD_TIME)
+    values (#{id,jdbcType=BIGINT}, #{sourceId,jdbcType=BIGINT}, #{targetId,jdbcType=BIGINT}, 
+      #{ifRead,jdbcType=TINYINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{creId,jdbcType=BIGINT}, #{creTime,jdbcType=TIMESTAMP}, 
+      #{updId,jdbcType=BIGINT}, #{updTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.blog.model.TMessage">
+    insert into t_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sourceId != null">
+        SOURCE_ID,
+      </if>
+      <if test="targetId != null">
+        TARGET_ID,
+      </if>
+      <if test="ifRead != null">
+        IF_READ,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="creId != null">
+        CRE_ID,
+      </if>
+      <if test="creTime != null">
+        CRE_TIME,
+      </if>
+      <if test="updId != null">
+        UPD_ID,
+      </if>
+      <if test="updTime != null">
+        UPD_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=BIGINT},
+      </if>
+      <if test="ifRead != null">
+        #{ifRead,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="creId != null">
+        #{creId,jdbcType=BIGINT},
+      </if>
+      <if test="creTime != null">
+        #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updId != null">
+        #{updId,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.blog.model.TMessageExample" resultType="java.lang.Long">
+    select count(*) from t_message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_message
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.sourceId != null">
+        SOURCE_ID = #{record.sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.targetId != null">
+        TARGET_ID = #{record.targetId,jdbcType=BIGINT},
+      </if>
+      <if test="record.ifRead != null">
+        IF_READ = #{record.ifRead,jdbcType=TINYINT},
+      </if>
+      <if test="record.title != null">
+        TITLE = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.creId != null">
+        CRE_ID = #{record.creId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creTime != null">
+        CRE_TIME = #{record.creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updId != null">
+        UPD_ID = #{record.updId,jdbcType=BIGINT},
+      </if>
+      <if test="record.updTime != null">
+        UPD_TIME = #{record.updTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_message
+    set ID = #{record.id,jdbcType=BIGINT},
+      SOURCE_ID = #{record.sourceId,jdbcType=BIGINT},
+      TARGET_ID = #{record.targetId,jdbcType=BIGINT},
+      IF_READ = #{record.ifRead,jdbcType=TINYINT},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      CONTENT = #{record.content,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=TINYINT},
+      CRE_ID = #{record.creId,jdbcType=BIGINT},
+      CRE_TIME = #{record.creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{record.updId,jdbcType=BIGINT},
+      UPD_TIME = #{record.updTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.blog.model.TMessage">
+    update t_message
+    <set>
+      <if test="sourceId != null">
+        SOURCE_ID = #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="targetId != null">
+        TARGET_ID = #{targetId,jdbcType=BIGINT},
+      </if>
+      <if test="ifRead != null">
+        IF_READ = #{ifRead,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="creId != null">
+        CRE_ID = #{creId,jdbcType=BIGINT},
+      </if>
+      <if test="creTime != null">
+        CRE_TIME = #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updId != null">
+        UPD_ID = #{updId,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        UPD_TIME = #{updTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.blog.model.TMessage">
+    update t_message
+    set SOURCE_ID = #{sourceId,jdbcType=BIGINT},
+      TARGET_ID = #{targetId,jdbcType=BIGINT},
+      IF_READ = #{ifRead,jdbcType=TINYINT},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=TINYINT},
+      CRE_ID = #{creId,jdbcType=BIGINT},
+      CRE_TIME = #{creTime,jdbcType=TIMESTAMP},
+      UPD_ID = #{updId,jdbcType=BIGINT},
+      UPD_TIME = #{updTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

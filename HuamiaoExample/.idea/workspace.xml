@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7fa56ef4-cef6-437b-ab6a-b5060e787b4d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\ProgramApp\maven\apache-maven-3.6.3\benlaiRepository" />
+        <option name="mavenHome" value="D:/ProgramApp/maven/apache-maven-3.6.3" />
+        <option name="userSettingsFile" value="D:\ProgramApp\maven\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="downloadAnnotationsAutomatically" value="true" />
+        <option name="downloadDocsAutomatically" value="true" />
+        <option name="downloadSourcesAutomatically" value="true" />
+        <option name="importAutomatically" value="true" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="2PUxdGhf2YaOSMgBmx60T36Oybx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.huamiao.example.model.excel" />
+      <recent name="com.huamiao.example.annotation" />
+      <recent name="com.huamiao.example.aspect" />
+      <recent name="com.huamiao.example.controller" />
+      <recent name="com.huamiao.example.util.excel" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workspace-personal\Refine\HuamiaoExample\src\main\java\com\huamiao\example" />
+      <recent name="E:\workspace-personal\Refine\HuamiaoExample\src\main\java\com\huamiao\example\model\excel" />
+      <recent name="E:\workspace-personal\Refine\HuamiaoExample\src\main\java\com\huamiao\example\util\excel" />
+      <recent name="E:\workspace-personal\Refine\HuamiaoExample\src\main\java\com\huamiao\example\util" />
+      <recent name="E:\workspace-personal\Refine\HuamiaoExample\src\main\java\com\huamiao\example\service\excel" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7fa56ef4-cef6-437b-ab6a-b5060e787b4d" name="Default Changelist" comment="" />
+      <created>1683525546474</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683525546474</updated>
+      <workItem from="1683525549998" duration="2027000" />
+      <workItem from="1683529381559" duration="124000" />
+      <workItem from="1683627745518" duration="1742000" />
+      <workItem from="1683685522069" duration="6808000" />
+      <workItem from="1684225633897" duration="28000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser" timestamp="1683688619643">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/1920.0.1536.824@0.0.1536.824" timestamp="1683688619643" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1683700510115">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1536.824@0.0.1536.824" timestamp="1683700510115" />
+    <state x="419" y="145" width="697" height="534" key="find.popup" timestamp="1684225658863">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="419" y="145" width="697" height="534" key="find.popup/0.0.1536.824/1920.0.1536.824@0.0.1536.824" timestamp="1684225658863" />
+    <state x="178" y="107" key="new project wizard" timestamp="1683689815372">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="178" y="107" key="new project wizard/0.0.1536.824/1920.0.1536.824@0.0.1536.824" timestamp="1683689815372" />
+  </component>
+</project>

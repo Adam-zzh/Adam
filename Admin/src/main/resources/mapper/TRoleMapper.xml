@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.admin.mapper.TRoleMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.admin.model.TRole">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+  </resultMap>
+  <resultMap id="RolePermissionResultMap" type="com.huamiao.admin.dto.RolePermission">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+
+    <collection property="permissionList" select="com.huamiao.admin.mapper.TPermissionMapper.queryByRoleId" column="{roleId=ID}">
+    </collection>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, ROLE_NAME, STATUS, SORT, DESCRIPTION, CREATE_TIME, ROLE_CODE
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.admin.model.TRoleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="queryByUserId" resultMap="RolePermissionResultMap">
+    SELECT
+    R.ID,
+    R.ROLE_NAME,
+    R.`STATUS`,
+    R.SORT,
+    R.DESCRIPTION,
+    R.CREATE_TIME,
+    R.ROLE_CODE
+            FROM
+    t_role AS R
+    INNER JOIN t_user_role AS UR ON R.ID = UR.ROLE_ID AND R.`STATUS` = 1
+    INNER JOIN t_user AS U ON UR.USER_ID = U.ID AND U.`STATUS` = 1
+    where U.ID = #{userId, jdbcType=BIGINT}
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_role
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.admin.model.TRoleExample">
+    delete from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.admin.model.TRole">
+    insert into t_role (ID, ROLE_NAME, STATUS, 
+      SORT, DESCRIPTION, CREATE_TIME, 
+      ROLE_CODE)
+    values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{sort,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{roleCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.admin.model.TRole">
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="roleName != null">
+        ROLE_NAME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.admin.model.TRoleExample" resultType="java.lang.Long">
+    select count(*) from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_role
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.roleName != null">
+        ROLE_NAME = #{record.roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.sort != null">
+        SORT = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null">
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=DATE},
+      </if>
+      <if test="record.roleCode != null">
+        ROLE_CODE = #{record.roleCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_role
+    set ID = #{record.id,jdbcType=BIGINT},
+      ROLE_NAME = #{record.roleName,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=TINYINT},
+      SORT = #{record.sort,jdbcType=INTEGER},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=DATE},
+      ROLE_CODE = #{record.roleCode,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.admin.model.TRole">
+    update t_role
+    <set>
+      <if test="roleName != null">
+        ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.admin.model.TRole">
+    update t_role
+    set ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT},
+      SORT = #{sort,jdbcType=INTEGER},
+      DESCRIPTION = #{description,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

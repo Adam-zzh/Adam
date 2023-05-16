@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huamiao.admin.mapper.TPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.huamiao.admin.model.TPermission">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="PID" jdbcType="BIGINT" property="pid" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="VALUE" jdbcType="VARCHAR" property="value" />
+    <result column="FULLPATH" jdbcType="VARCHAR" property="fullpath" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <resultMap id="PermissonResultMap" type="com.huamiao.admin.model.TPermission">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="PID" jdbcType="BIGINT" property="pid" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="VALUE" jdbcType="VARCHAR" property="value" />
+    <result column="FULLPATH" jdbcType="VARCHAR" property="fullpath" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, PID, ICON, TYPE, NAME, URL, SORT, VALUE, FULLPATH, CREATE_TIME, STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.huamiao.admin.model.TPermissionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_permission
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_permission
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huamiao.admin.model.TPermissionExample">
+    delete from t_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huamiao.admin.model.TPermission">
+    insert into t_permission (ID, PID, ICON, 
+      TYPE, NAME, URL, SORT, 
+      VALUE, FULLPATH, CREATE_TIME, 
+      STATUS)
+    values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{icon,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{value,jdbcType=VARCHAR}, #{fullpath,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huamiao.admin.model.TPermission">
+    insert into t_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="pid != null">
+        PID,
+      </if>
+      <if test="icon != null">
+        ICON,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="value != null">
+        VALUE,
+      </if>
+      <if test="fullpath != null">
+        FULLPATH,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="fullpath != null">
+        #{fullpath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huamiao.admin.model.TPermissionExample" resultType="java.lang.Long">
+    select count(*) from t_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="queryByRoleId" resultMap="PermissonResultMap">
+        SELECT
+        P.ID,
+        P.PID,
+        P.ICON,
+        P.TYPE,
+        P.`NAME`,
+        P.URL,
+        P.SORT,
+        P.`VALUE`,
+        P.FULLPATH,
+        P.`STATUS`,
+        P.CREATE_TIME
+        FROM
+        t_permission AS P
+        INNER JOIN t_role_permission AS RP ON P.ID = RP.PERMISSION_ID AND P.`STATUS` = 1
+        INNER JOIN t_role AS R ON R.ID = RP.ROLE_ID AND R.`STATUS` = 1
+        where R.ID = #{roleId}
+        ORDER BY
+        P.SORT ASC
+    </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_permission
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.pid != null">
+        PID = #{record.pid,jdbcType=BIGINT},
+      </if>
+      <if test="record.icon != null">
+        ICON = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        URL = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null">
+        SORT = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.value != null">
+        VALUE = #{record.value,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fullpath != null">
+        FULLPATH = #{record.fullpath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_permission
+    set ID = #{record.id,jdbcType=BIGINT},
+      PID = #{record.pid,jdbcType=BIGINT},
+      ICON = #{record.icon,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=TINYINT},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      URL = #{record.url,jdbcType=VARCHAR},
+      SORT = #{record.sort,jdbcType=INTEGER},
+      VALUE = #{record.value,jdbcType=VARCHAR},
+      FULLPATH = #{record.fullpath,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huamiao.admin.model.TPermission">
+    update t_permission
+    <set>
+      <if test="pid != null">
+        PID = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null">
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        VALUE = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="fullpath != null">
+        FULLPATH = #{fullpath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huamiao.admin.model.TPermission">
+    update t_permission
+    set PID = #{pid,jdbcType=BIGINT},
+      ICON = #{icon,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=TINYINT},
+      NAME = #{name,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=INTEGER},
+      VALUE = #{value,jdbcType=VARCHAR},
+      FULLPATH = #{fullpath,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
