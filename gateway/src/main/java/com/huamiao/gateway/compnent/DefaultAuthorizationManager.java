@@ -1,8 +1,8 @@
 package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pluto.common.basic.enums.UserStatusCodeEnum;
-import com.pluto.common.basic.utils.ResultVoUtil;
+import com.huamiao.common.entity.ResponseVo;
+import com.huamiao.gateway.enums.UserStatusCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.access.AccessDeniedException;
@@ -59,7 +59,7 @@ public class DefaultAuthorizationManager implements ReactiveAuthorizationManager
         return check(authentication, object)
                 .filter(AuthorizationDecision::isGranted)
                 .switchIfEmpty(Mono.defer(() -> {
-                    String body = JSONObject.toJSONString(ResultVoUtil.failed(UserStatusCodeEnum.PERMISSION_DENIED));
+                    String body = JSONObject.toJSONString(ResponseVo.failed(UserStatusCodeEnum.PERMISSION_DENIED));
                     return Mono.error(new AccessDeniedException(body));
                 }))
                 .flatMap(d -> Mono.empty());

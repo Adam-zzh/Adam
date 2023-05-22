@@ -2,8 +2,6 @@ package com.huamiao.gateway.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.huamiao.common.constant.HuamiaoConst;
-import com.huamiao.common.util.ApplicationUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -46,77 +42,39 @@ public class JwtTokenUtil {
     /**
      * 根据负责生成JWT的token
      */
-    private String generateToken(Map<String, Object> claims) {
+    public String generateToken(Map<String, Object> claims, String subject, long expiration) {
+        final Date createdDate = DateUtil.date();
+        final Date expirationDate = calculateExpirationDate(createdDate, expiration);
         return Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(generateExpirationDate())
+                .setSubject(subject)
+                .setIssuedAt(createdDate)
+                .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
     /**
-     * 从token中获取JWT中的负载
+     * 根据负责生成JWT的token
      */
-    private Claims getClaimsFromToken(String token) {
-        Claims claims = null;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            LOGGER.info("JWT格式验证失败:{}", token);
-        }
-        return claims;
-    }
-
-    /**
-     * 生成token的过期时间
-     */
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+    public String generateToken(Map<String, Object> claims, String subject) {
+        return generateToken(claims, subject, expiration);
     }
 
     /**
      * 从token中获取用户昵称
+     * @param token
+     * @return
      */
-    public Map<String, String> getSubjectFromToken(String token) {
-        Map<String, String> subject;
+    public String getSubjectFromToken(String token) {
+        String subject;
         try {
             Claims claims = getClaimsFromToken(token);
-            subject = (Map<String, String>) claims.get(CLAIM_KEY_USERNAME);
+            subject = claims.getSubject();
         } catch (Exception e) {
             subject = null;
         }
         return subject;
-    }
-
-    /**
-     * 从token中获取用户昵称
-     */
-    public String getUserNameFromToken(String token) {
-        String userName;
-        try {
-            Map<String, String> map = getSubjectFromToken(token);
-            userName = map.get(HuamiaoConst.PAYLOAD_KEY_USERNAME);
-        } catch (Exception e) {
-            userName = null;
-        }
-        return userName;
-    }
-
-    /**
-     * 从token中获取用户昵称
-     */
-    public String getAccountFromToken(String token) {
-        String account;
-        try {
-            Map<String, String> map = getSubjectFromToken(token);
-            account = map.get(HuamiaoConst.PAYLOAD_KEY_ACCOUNT);
-        } catch (Exception e) {
-            account = null;
-        }
-        return account;
     }
 
     /**
@@ -126,37 +84,8 @@ public class JwtTokenUtil {
      * @param userDetails 从数据库中查询出来的用户信息
      */
     public boolean validateToken(String token, UserDetails userDetails) {
-        String userName = getAccountFromToken(token);
+        String userName = getSubjectFromToken(token);
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    /**
-     * 判断token是否已经失效
-     */
-    private boolean isTokenExpired(String token) {
-        Date expiredDate = getExpiredDateFromToken(token);
-        return expiredDate.before(new Date());
-    }
-
-    /**
-     * 从token中获取过期时间
-     */
-    private Date getExpiredDateFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        return claims.getExpiration();
-    }
-
-    /**
-     * 根据用户信息生成token
-     */
-    public String generateToken(String userName, String account) {
-        Map<String, String> map = new HashMap<>();
-        map.put(HuamiaoConst.PAYLOAD_KEY_ACCOUNT, account);
-        map.put(HuamiaoConst.PAYLOAD_KEY_USERNAME, userName);
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, map);
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
     }
 
     /**
@@ -185,9 +114,50 @@ public class JwtTokenUtil {
         if(tokenRefreshJustBefore(token,30*60)){
             return token;
         }else{
-            claims.put(CLAIM_KEY_CREATED, new Date());
-            return generateToken(claims);
+            claims.setIssuedAt(new Date());
+            return generateToken(claims, getSubjectFromToken(token), expiration);
         }
+    }
+
+    /**
+     * 从token中获取JWT中的负载
+     * @param token
+     * @return
+     */
+    public Claims getClaimsFromToken(String token) {
+        Claims claims = null;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            LOGGER.info("JWT格式验证失败:{}", token);
+        }
+        return claims;
+    }
+
+    /**
+     * 生成token的过期时间
+     */
+    private static Date calculateExpirationDate(Date createdDate, long expiration) {
+        return new Date(createdDate.getTime() + expiration);
+    }
+
+    /**
+     * 判断token是否已经失效
+     */
+    private boolean isTokenExpired(String token) {
+        Date expiredDate = getExpiredDateFromToken(token);
+        return expiredDate.before(new Date());
+    }
+
+    /**
+     * 从token中获取过期时间
+     */
+    private Date getExpiredDateFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getExpiration();
     }
 
     /**
@@ -197,25 +167,13 @@ public class JwtTokenUtil {
      */
     private boolean tokenRefreshJustBefore(String token, int time) {
         Claims claims = getClaimsFromToken(token);
-        Date created = claims.get(CLAIM_KEY_CREATED, Date.class);
+        Date created = claims.getIssuedAt();
         Date refreshDate = new Date();
         //刷新时间在创建时间的指定时间内
         if(refreshDate.after(created)&&refreshDate.before(DateUtil.offsetSecond(created,time))){
             return true;
         }
         return false;
-    }
-
-    public Map<String, String> getSubjectByToken(){
-        HttpServletRequest request = ApplicationUtil.getRequest();
-        String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            String[] tokens = authHeader.split("\\s");// The part after "Bearer "
-            String authToken = tokens[1];
-            Map<String, String> subject = this.getSubjectFromToken(authToken);
-            return subject;
-        }
-        return null;
     }
 
 }

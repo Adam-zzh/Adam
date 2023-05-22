@@ -1,9 +1,8 @@
 package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pluto.common.basic.enums.UserStatusCodeEnum;
-import com.pluto.common.basic.utils.ResultVoUtil;
-import com.pluto.common.basic.vo.ResultVO;
+import com.huamiao.common.entity.ResponseVo;
+import com.huamiao.gateway.enums.UserStatusCodeEnum;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.security.authentication.*;
@@ -29,25 +28,25 @@ public class DefaultAuthenticationFailureHandler implements ServerAuthentication
     public Mono<Void> onAuthenticationFailure(WebFilterExchange webFilterExchange, AuthenticationException exception) {
         return Mono.defer(() -> Mono.just(webFilterExchange.getExchange().getResponse()).flatMap(response -> {
             DataBufferFactory dataBufferFactory = response.bufferFactory();
-            ResultVO<Map<String, Object>> resultVO = ResultVoUtil.error();
+            ResponseVo<Map<String, Object>> resultVO = ResponseVo.failed();
             // 账号不存在
             if (exception instanceof UsernameNotFoundException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.ACCOUNT_NOT_EXIST);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.ACCOUNT_NOT_EXIST);
                 // 用户名或密码错误
             } else if (exception instanceof BadCredentialsException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.LOGIN_PASSWORD_ERROR);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.LOGIN_PASSWORD_ERROR);
                 // 账号已过期
             } else if (exception instanceof AccountExpiredException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.ACCOUNT_EXPIRED);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.ACCOUNT_EXPIRED);
                 // 账号已被锁定
             } else if (exception instanceof LockedException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.ACCOUNT_LOCKED);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.ACCOUNT_LOCKED);
                 // 用户凭证已失效
             } else if (exception instanceof CredentialsExpiredException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.ACCOUNT_CREDENTIAL_EXPIRED);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.ACCOUNT_CREDENTIAL_EXPIRED);
                 // 账号已被禁用
             } else if (exception instanceof DisabledException) {
-                resultVO = ResultVoUtil.failed(UserStatusCodeEnum.ACCOUNT_DISABLE);
+                resultVO = ResponseVo.failed(UserStatusCodeEnum.ACCOUNT_DISABLE);
             }
 
             DataBuffer dataBuffer = dataBufferFactory.wrap(JSONObject.toJSONString(resultVO).getBytes());

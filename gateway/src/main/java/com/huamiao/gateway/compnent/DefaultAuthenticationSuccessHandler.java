@@ -1,8 +1,9 @@
 package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pluto.common.basic.utils.JwtTokenUtil;
-import com.pluto.common.basic.utils.ResultVoUtil;
+import com.huamiao.common.entity.ResponseVo;
+import com.huamiao.gateway.util.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -25,16 +26,13 @@ import java.util.Map;
 public class DefaultAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
 
     /**
-     * token 过期时间
-     */
-    @Value("${jwt.token.expired}")
-    private int jwtTokenExpired;
-
-    /**
      * 刷新token 时间
      */
     @Value("${jwt.token.refresh.expired}")
-    private int jwtTokenRefreshExpired;
+    private long jwtTokenRefreshExpired;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
@@ -46,12 +44,12 @@ public class DefaultAuthenticationSuccessHandler implements ServerAuthentication
             map.put("userId", userDetails.getUserId());
             map.put("username", userDetails.getUsername());
             map.put("roles",userDetails.getAuthorities());
-            String token = JwtTokenUtil.generateToken(map, userDetails.getUsername(), jwtTokenExpired);
-            String refreshToken = JwtTokenUtil.generateToken(map, userDetails.getUsername(), jwtTokenRefreshExpired);
+            String token = jwtTokenUtil.generateToken(map, userDetails.getUsername());
+            String refreshToken = jwtTokenUtil.generateToken(map, userDetails.getUsername(), jwtTokenRefreshExpired);
             Map<String, Object> tokenMap = new HashMap<>(2);
             tokenMap.put("token", token);
             tokenMap.put("refreshToken", refreshToken);
-            DataBuffer dataBuffer = dataBufferFactory.wrap(JSONObject.toJSONString(ResultVoUtil.success(tokenMap)).getBytes());
+            DataBuffer dataBuffer = dataBufferFactory.wrap(JSONObject.toJSONString(ResponseVo.success(tokenMap)).getBytes());
             return response.writeWith(Mono.just(dataBuffer));
         }));
     }

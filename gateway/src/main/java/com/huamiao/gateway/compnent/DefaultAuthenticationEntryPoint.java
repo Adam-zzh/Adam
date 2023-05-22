@@ -1,8 +1,8 @@
 package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pluto.common.basic.enums.UserStatusCodeEnum;
-import com.pluto.common.basic.utils.ResultVoUtil;
+import com.huamiao.common.entity.ResponseVo;
+import com.huamiao.common.enums.ResultCode;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class DefaultAuthenticationEntryPoint implements ServerAuthenticationEntr
                     response.setStatusCode(HttpStatus.UNAUTHORIZED);
                     response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
                     DataBufferFactory dataBufferFactory = response.bufferFactory();
-                    String result = JSONObject.toJSONString(ResultVoUtil.failed(UserStatusCodeEnum.USER_UNAUTHORIZED));
+                    String result = JSONObject.toJSONString(ResponseVo.failed(ResultCode.UNAUTHORIZED));
                     DataBuffer buffer = dataBufferFactory.wrap(result.getBytes(
                             Charset.defaultCharset()));
                     return response.writeWith(Mono.just(buffer));
