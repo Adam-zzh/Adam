@@ -19,6 +19,7 @@
     <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
     <spring.cloud.alibaba.version>2.1.2.RELEASE</spring.cloud.alibaba.version>
     <spring.cloud.starter.version>3.1.2</spring.cloud.starter.version>
+    <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
   </properties>
 
   <dependencies>
@@ -26,8 +27,29 @@
       <groupId>Huamiao</groupId>
       <artifactId>Common</artifactId>
       <version>${huamiao.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jackson-databind</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
+    <!--springboot依赖-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <version>${spring.boot.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+      <version>${spring.boot.version}</version>
+    </dependency>
+
+    <!--gateway-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-gateway</artifactId>

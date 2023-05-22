@@ -1,8 +1,12 @@
 package com.huamiao.gateway.config;
 
 import com.huamiao.gateway.compnent.*;
+import com.huamiao.gateway.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.DelegatingReactiveAuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -24,6 +28,8 @@ import java.util.LinkedList;
  * @description webflux security核心配置类
  */
 @EnableWebFluxSecurity
+@Configuration
+@EnableConfigurationProperties(IgnoreUrlsConfig.class)
 public class WebfluxSecurityConfig {
 
     @Resource
@@ -50,11 +56,7 @@ public class WebfluxSecurityConfig {
     @Resource
     private DefaultAccessDeniedHandler defaultAccessDeniedHandler;
 
-    /**
-     * 自定义过滤权限
-     */
-    @Value("${security.noFilter}")
-    private String noFilter;
+    private IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
@@ -64,7 +66,7 @@ public class WebfluxSecurityConfig {
                 .securityContextRepository(defaultSecurityContextRepository)
                 // 请求拦截处理
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers(noFilter).permitAll()
+                        .pathMatchers(ignoreUrlsConfig.getUrls().toArray(new String[]{})).permitAll()
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyExchange().access(defaultAuthorizationManager)
                 )

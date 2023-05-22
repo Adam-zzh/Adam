@@ -28,7 +28,7 @@ public class DefaultAuthenticationSuccessHandler implements ServerAuthentication
     /**
      * 刷新token 时间
      */
-    @Value("${jwt.token.refresh.expired}")
+    @Value("${jwt.refresh}")
     private long jwtTokenRefreshExpired;
 
     @Autowired
