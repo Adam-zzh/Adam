@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: test_route
+          uri: https://www.baidu.com
+          predicates:
+            #访问路径：localhost:88/hello?url=baidu 代表跳转到www.baidu.com/hello
+            #url带有baidu的自动跳转到https://www.baidu.com
+            - Query=url,baidu
+server:
+  port: 88

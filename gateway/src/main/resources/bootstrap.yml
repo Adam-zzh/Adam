@@ -1,0 +1,31 @@
+# 配置中心的应用名
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      # 标注服务名
+      config:
+        name: HuamiaoGateway
+        namespace: de2382b3-d71c-47d0-9f03-970226616150
+        server-addr: 127.0.0.1:8848 #Nacos地址
+        file-extension: yaml
+
+#超时配置
+feign:
+  client:
+    config:
+      # 全局配置（default 默认就是适用于全部微服务）
+      default:
+        connectTimeout: 100000
+        readTimeout: 100000
+      # 单独配置
+      admin:
+        connectTimeout: 300000
+        readTimeout: 300000
+  httpclient:
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 50

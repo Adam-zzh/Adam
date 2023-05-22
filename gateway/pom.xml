@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>Huamiao</groupId>
+  <artifactId>gateway</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>gateway</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <huamiao.version>1.0-SNAPSHOT</huamiao.version>
+    <jjwt.version>0.9.0</jjwt.version>
+    <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
+    <spring.cloud.alibaba.version>2.1.2.RELEASE</spring.cloud.alibaba.version>
+    <spring.cloud.starter.version>3.1.2</spring.cloud.starter.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>Huamiao</groupId>
+      <artifactId>Common</artifactId>
+      <version>${huamiao.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-gateway</artifactId>
+      <version>${spring.cloud.starter.version}</version>
+    </dependency>
+    <!--服务注册/发现中心依赖-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+      <version>${spring.cloud.alibaba.version}</version>
+      <exclusions>
+        <!-- 将ribbon排除 -->
+        <exclusion>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>spring-cloud-commons</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+      <version>${spring.cloud.starter.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-cloud-commons</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!--服务的配置中心依赖-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+      <version>${spring.cloud.alibaba.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-cloud-commons</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-security</artifactId>
+      <version>2.2.2.RELEASE</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-cloud-starter</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <version>${spring.cloud.starter.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-cloud-commons</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.openfeign</groupId>
+      <artifactId>feign-httpclient</artifactId>
+      <version>12.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security.oauth</groupId>
+      <artifactId>spring-security-oauth2</artifactId>
+      <!-- 指明版本，解决redis存储出现的问题：java.lang.NoSuchMethodError: org.springframework.data.redis.connection.RedisConnection.set([B[B)V问题 -->
+      <version>2.3.3.RELEASE</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>org.springframework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>spring-security-web</artifactId>
+          <groupId>org.springframework.security</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+</project>

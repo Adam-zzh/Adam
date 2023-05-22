@@ -30,3 +30,5 @@ supplier/APP_ROOT_IS_UNDEFINED/
 logPath_IS_UNDEFINED
 *.plantuml
 /nfms-web/src/main/java/com/newretail/financial/nfms/config/SwaggerConfig.java
+*/.idea/
+*/target/
