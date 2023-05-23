@@ -2,6 +2,7 @@ package com.huamiao.gateway.config;
 
 import com.huamiao.gateway.compnent.*;
 import com.huamiao.gateway.util.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -56,10 +57,9 @@ public class WebfluxSecurityConfig {
     @Resource
     private DefaultAccessDeniedHandler defaultAccessDeniedHandler;
 
-    private IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity, @Autowired IgnoreUrlsConfig ignoreUrlsConfig) {
         httpSecurity
                 // 登录认证处理
                 .authenticationManager(reactiveAuthenticationManager())
