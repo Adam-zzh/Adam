@@ -26,12 +26,6 @@
       <groupId>Huamiao</groupId>
       <artifactId>Common</artifactId>
       <version>${huamiao.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jackson-databind</artifactId>
-          <groupId>com.fasterxml.jackson.core</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <!--springboot依赖-->
@@ -61,45 +55,23 @@
           <groupId>org.springframework.cloud</groupId>
           <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
         </exclusion>
-        <exclusion>
-          <artifactId>spring-cloud-commons</artifactId>
-          <groupId>org.springframework.cloud</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>spring-cloud-commons</artifactId>
-          <groupId>org.springframework.cloud</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <!--服务的配置中心依赖-->
     <dependency>
       <groupId>com.alibaba.cloud</groupId>
       <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>spring-cloud-commons</artifactId>
-          <groupId>org.springframework.cloud</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>spring-cloud-starter</artifactId>
-          <groupId>org.springframework.cloud</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -111,12 +83,6 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-openfeign</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>spring-cloud-commons</artifactId>
-          <groupId>org.springframework.cloud</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
