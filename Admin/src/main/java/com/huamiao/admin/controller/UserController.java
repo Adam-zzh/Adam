@@ -5,7 +5,6 @@ import com.huamiao.admin.service.UserService;
 import com.huamiao.admin.vo.userVo.RegistVo;
 import com.huamiao.admin.vo.userVo.UpdPwdVo;
 import com.huamiao.admin.vo.userVo.UpdUserVo;
-import com.huamiao.admin.vo.userVo.UserVo;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
 import com.huamiao.common.entity.ResponseVo;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/userController")
+@RequestMapping("/user")
 @Api("用户接口")
 public class UserController {
 
@@ -40,13 +39,13 @@ public class UserController {
     @ApiOperation("根据账号更新用户信息")
     @PostMapping("/user")
     public ResponseVo updOrSaveUserInfo(@Validated @RequestBody UpdUserVo updUserVo){
-        return userService.updOrSaveUserInfo(updUserVo);
+        return userService.updOrSave(updUserVo);
     }
 
     @ApiOperation("删除用户")
     @DeleteMapping("user/{userId}")
     public ResponseVo delUser(@PathVariable("userId") Long userId){
-        return userService.delUser(userId);
+        return userService.delete(userId);
     }
 
     @ApiOperation("用户退出系统")
@@ -70,7 +69,13 @@ public class UserController {
     @ApiOperation("查询用户列表")
     @PostMapping("users")
     public PageVo<TUser> getAllUser(@RequestBody BaseParam baseParam){
-        return userService.getAllUser(baseParam);
+        return userService.queryList(baseParam);
+    }
+
+    @ApiOperation("按照用户名获取用户")
+    @GetMapping("findByUserName")
+    public ResponseVo<TUser> findByUserName(String userName){
+        return userService.findByUserName(userName);
     }
 
 }

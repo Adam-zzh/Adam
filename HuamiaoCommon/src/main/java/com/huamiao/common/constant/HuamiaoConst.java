@@ -11,14 +11,14 @@ package com.huamiao.common.constant;
 public class HuamiaoConst {
 
     /**
-     * @Description 禁用
+     * @Description 是
      */
-    public static final Byte ONE = 1;
+    public static final Integer ONE = 1;
 
     /**
-     * @Description 未禁用
+     * @Description 否
      */
-    public static final Byte ZERO = 0;
+    public static final Integer ZERO = 0;
 
     /**
      * redis 存储用户信息的键

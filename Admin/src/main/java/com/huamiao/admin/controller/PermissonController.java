@@ -1,8 +1,8 @@
 package com.huamiao.admin.controller;
 
 import com.huamiao.admin.model.TPermission;
-import com.huamiao.admin.service.PermissonService;
-import com.huamiao.admin.vo.permissonVo.PermissonVo;
+import com.huamiao.admin.service.PermissionService;
+import com.huamiao.admin.vo.permissonVo.PermissionVo;
 import com.huamiao.common.entity.ResponseVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,29 +25,29 @@ import java.util.List;
 public class PermissonController {
 
     @Autowired
-    private PermissonService permissonService;
+    private PermissionService permissonService;
 
     @ApiOperation("更新或保存权限")
     @PostMapping("updOrSavePermisson")
     public ResponseVo updOrSavePermisson(@RequestBody TPermission permission){
-        return permissonService.updOrSavePermisson(permission);
+        return permissonService.updOrSave(permission);
     }
 
     @ApiOperation("查询所有资源返回树状结构")
     @PostMapping("permissons")
     public ResponseVo<List<TPermission>> selAllPermission(){
-        return permissonService.selAllPermission();
+        return permissonService.queryList();
     }
 
     @ApiOperation("角色授权展示页面")
     @PostMapping("permissons/roleId")
-    public ResponseVo<List<PermissonVo>> selAllPermissionByRole(@PathVariable("roleId") Long roleId){
-        return permissonService.selAllPermissionByRole(roleId);
+    public ResponseVo<List<PermissionVo>> selAllPermissionByRole(@PathVariable("roleId") Long roleId){
+        return permissonService.queryListByRoleId(roleId);
     }
 
     @ApiOperation("角色授权展示页面")
     @GetMapping("permisson/{id}")
     public ResponseVo detailPermission(@PathVariable("id") Long id){
-        return permissonService.detailPermission(id);
+        return permissonService.detail(id);
     }
 }

@@ -1,20 +1,19 @@
-package com.huamiao.admin.service;
+package com.huamiao.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.tree.TreeUtil;
 import com.huamiao.admin.mapper.TPermissionMapper;
 import com.huamiao.admin.mapper.TRolePermissionMapper;
 import com.huamiao.admin.model.TPermission;
 import com.huamiao.admin.model.TPermissionExample;
 import com.huamiao.admin.model.TRolePermission;
 import com.huamiao.admin.model.TRolePermissionExample;
-import com.huamiao.admin.vo.permissonVo.PermissonVo;
+import com.huamiao.admin.service.PermissionService;
+import com.huamiao.admin.vo.permissonVo.PermissionVo;
 import com.huamiao.common.constant.HuamiaoConst;
 import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.common.util.TreeHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -29,14 +28,15 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Service
-@Transactional
-public class PermissonService {
+public class PermissionServiceImpl implements PermissionService {
+
     @Autowired
     private TPermissionMapper permissonMapper;
     @Autowired
     private TRolePermissionMapper rolePermissionMapper;
 
-    public ResponseVo updOrSavePermisson(TPermission permission) {
+    @Override
+    public ResponseVo<Boolean> updOrSave(TPermission permission) {
         StringBuffer sb = new StringBuffer();
         TPermissionExample permissionExample = new TPermissionExample();
 
@@ -70,7 +70,8 @@ public class PermissonService {
 
     }
 
-    public ResponseVo<List<TPermission>> selAllPermission() {
+    @Override
+    public ResponseVo<List<TPermission>> queryList() {
         TPermissionExample example = new TPermissionExample();
         example.setOrderByClause("SORT");
         example.createCriteria().andStatusEqualTo(HuamiaoConst.ZERO);
@@ -80,7 +81,8 @@ public class PermissonService {
         return ResponseVo.success(tree);
     }
 
-    public ResponseVo<List<PermissonVo>> selAllPermissionByRole(Long roleId) {
+    @Override
+    public ResponseVo<List<PermissionVo>> queryListByRoleId(Long roleId) {
         TRolePermissionExample example = new TRolePermissionExample();
         example.createCriteria()
                 .andRoleIdEqualTo(roleId);
@@ -88,8 +90,8 @@ public class PermissonService {
                 .stream()
                 .map(TRolePermission::getPermissionId)
                 .collect(Collectors.toList());
-        List<PermissonVo> permissonVos = (List<PermissonVo>) this.selAllPermission();
-        List<PermissonVo> collect = permissonVos.stream().map(item -> {
+        List<PermissionVo> permissonVos = (List<PermissionVo>) this.queryList();
+        List<PermissionVo> collect = permissonVos.stream().map(item -> {
             if (permissionIds.contains(item.getId())) {
                 item.setIfHasResource((byte) 1);
             } else {
@@ -100,7 +102,8 @@ public class PermissonService {
         return ResponseVo.success(collect);
     }
 
-    public ResponseVo detailPermission(Long id) {
+    @Override
+    public ResponseVo<TPermission> detail(Long id) {
         TPermission tPermission = permissonMapper.selectByPrimaryKey(id);
         return ResponseVo.success(tPermission);
     }

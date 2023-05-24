@@ -18,7 +18,7 @@ public class TUser implements Serializable {
     private String password;
 
     @ApiModelProperty(value = "用户类型0：普通用户   1：系统管理员")
-    private Byte userType;
+    private Integer userType;
 
     @ApiModelProperty(value = "用户邮箱")
     private String userEmail;
@@ -39,7 +39,7 @@ public class TUser implements Serializable {
     private String rmk;
 
     @ApiModelProperty(value = "是否禁用0:否 1：是")
-    private Byte status;
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -75,11 +75,11 @@ public class TUser implements Serializable {
         this.password = password;
     }
 
-    public Byte getUserType() {
+    public Integer getUserType() {
         return userType;
     }
 
-    public void setUserType(Byte userType) {
+    public void setUserType(Integer userType) {
         this.userType = userType;
     }
 
@@ -131,11 +131,11 @@ public class TUser implements Serializable {
         this.rmk = rmk;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

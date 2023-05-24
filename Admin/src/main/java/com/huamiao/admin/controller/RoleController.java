@@ -29,25 +29,25 @@ public class RoleController {
     @ApiOperation(value = "角色信息回显")
     @GetMapping("role/{roleId}")
     public ResponseVo selRole(@PathVariable("roleId") Long roleId){
-        return roleService.selRole(roleId);
+        return roleService.detail(roleId);
     }
 
     @ApiOperation(value = "更新保存角色")
     @PutMapping("role")
     public ResponseVo updOrSaveRole(@RequestBody TRole role){
-        return roleService.updOrSaveRole(role);
+        return roleService.updOrSave(role);
     }
 
     @ApiOperation(value = "变更角色状态")
     @PutMapping("disable/{roleId}/{sta}")
-    public ResponseVo disableRole(@PathVariable("roleId") Long roleId, @PathVariable Byte sta){
-        return roleService.disableRole(roleId, sta);
+    public ResponseVo changeStatus(@PathVariable("roleId") Long roleId, @PathVariable Byte sta){
+        return roleService.changeStatus(roleId, sta);
     }
 
     @ApiOperation(value = "角色列表")
     @PostMapping("roles")
     public PageVo<TRole> selAllRoles(@RequestBody BaseParam baseParam){
-        return roleService.selAllRoles(baseParam);
+        return roleService.queryList(baseParam);
     }
 
 }

@@ -12,7 +12,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class PermissonVo extends TPermission {
+public class PermissionVo extends TPermission {
 
     private Byte ifHasResource;//是否拥有资源 0否 1是
 

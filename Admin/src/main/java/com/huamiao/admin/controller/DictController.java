@@ -33,14 +33,14 @@ public class DictController {
     @ApiOperation("根据分类code查出所有字典")
     @GetMapping("dict/{categoryCode}")
     public ResponseVo detailDict(@PathVariable("categoryCode") String categoryCode){
-        return dictService.detailDict(categoryCode);
+        return dictService.detail(categoryCode);
     }
 
     @ApiOperation("根据分类code和dictcode查出指定字典")
     @GetMapping("dict/{categoryCode}/{dictCode}")
     public ResponseVo detailOnlyDict(@PathVariable("categoryCode") String categoryCode,
                                    @PathVariable("dictCode") String dictCode){
-        return dictService.detailOnlyDict(categoryCode, dictCode);
+        return dictService.detailOnlyOne(categoryCode, dictCode);
     }
 
     @ApiOperation("查出所有分类（按创建时间排序）")
