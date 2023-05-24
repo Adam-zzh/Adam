@@ -46,8 +46,6 @@ public class UserService {
 
     @Autowired
     private TUserMapper userMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     /**
      * 用户注册接口
@@ -75,7 +73,7 @@ public class UserService {
         }
 
         tUser.setCreateTime(new Date());
-        tUser.setPassword(passwordEncoder.encode(tUser.getPassword()));
+        tUser.setPassword(tUser.getPassword());
         tUser.setId(IdHelper.generateLongId());
 
         int i = userMapper.insertSelective(tUser);
@@ -166,10 +164,7 @@ public class UserService {
         }
         TUser tUser = tUsers.get(0);
 
-        if (!passwordEncoder.matches(updPwdVo.getOldPassword(), tUser.getPassword())) {
-            return ResponseVo.failed("密码不对哟");
-        }
-        tUser.setPassword(passwordEncoder.encode(updPwdVo.getNewPassword()));
+        tUser.setPassword(updPwdVo.getNewPassword());
         int i = userMapper.updateByPrimaryKeySelective(tUser);
         if (i < 1) {
             return ResponseVo.failed("更新失败");
@@ -187,7 +182,7 @@ public class UserService {
             return ResponseVo.failed("更新失败哦");
         }
         TUser tUser = tUsers.get(0);
-        tUser.setPassword(passwordEncoder.encode("123456"));
+        tUser.setPassword("123456");
         userMapper.updateByPrimaryKeySelective(tUser);
         return ResponseVo.success("重置成功");
     }
