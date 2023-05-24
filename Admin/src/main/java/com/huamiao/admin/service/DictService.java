@@ -29,8 +29,6 @@ public class DictService {
 
     @Autowired
     private TDictMapper dictMapper;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @Transactional
     public ResponseVo updOrSaveDict(TDict dict) {

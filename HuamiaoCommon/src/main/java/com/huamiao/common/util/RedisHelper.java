@@ -17,184 +17,184 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedisHelper {
 
-    private RedisTemplate<String, Object> getRedisTemplate(){
+    private static RedisTemplate<String, Object> getRedisTemplate(){
         return ApplicationUtil.getBean(RedisTemplate.class);
     }
     
-    public void set(String key, Object value, long time) {
+    public static void set(String key, Object value, long time) {
         getRedisTemplate().opsForValue().set(key, value, time, TimeUnit.SECONDS);
     }
 
     
-    public void set(String key, Object value) {
+    public static void set(String key, Object value) {
         getRedisTemplate().opsForValue().set(key, value);
     }
 
     
-    public Object get(String key) {
+    public static Object get(String key) {
         return getRedisTemplate().opsForValue().get(key);
     }
 
     
-    public Boolean del(String key) {
+    public static Boolean del(String key) {
         return getRedisTemplate().delete(key);
     }
 
     
-    public Long del(List<String> keys) {
+    public static Long del(List<String> keys) {
         return getRedisTemplate().delete(keys);
     }
 
     
-    public Boolean expire(String key, long time) {
+    public static Boolean expire(String key, long time) {
         return getRedisTemplate().expire(key, time, TimeUnit.SECONDS);
     }
 
     
-    public Long getExpire(String key) {
+    public static Long getExpire(String key) {
         return getRedisTemplate().getExpire(key, TimeUnit.SECONDS);
     }
 
     
-    public Boolean hasKey(String key) {
+    public static Boolean hasKey(String key) {
         return getRedisTemplate().hasKey(key);
     }
 
     
-    public Long incr(String key, long delta) {
+    public static Long incr(String key, long delta) {
         return getRedisTemplate().opsForValue().increment(key, delta);
     }
 
     
-    public Long decr(String key, long delta) {
+    public static Long decr(String key, long delta) {
         return getRedisTemplate().opsForValue().increment(key, -delta);
     }
 
     
-    public Object hGet(String key, String hashKey) {
+    public static Object hGet(String key, String hashKey) {
         return getRedisTemplate().opsForHash().get(key, hashKey);
     }
 
     
-    public Boolean hSet(String key, String hashKey, Object value, long time) {
+    public static Boolean hSet(String key, String hashKey, Object value, long time) {
         getRedisTemplate().opsForHash().put(key, hashKey, value);
         return expire(key, time);
     }
 
     
-    public void hSet(String key, String hashKey, Object value) {
+    public static void hSet(String key, String hashKey, Object value) {
         getRedisTemplate().opsForHash().put(key, hashKey, value);
     }
 
     
-    public Map<Object, Object> hGetAll(String key) {
+    public static Map<Object, Object> hGetAll(String key) {
         return getRedisTemplate().opsForHash().entries(key);
     }
 
     
-    public Boolean hSetAll(String key, Map<String, Object> map, long time) {
+    public static Boolean hSetAll(String key, Map<String, Object> map, long time) {
         getRedisTemplate().opsForHash().putAll(key, map);
         return expire(key, time);
     }
 
     
-    public void hSetAll(String key, Map<String, ?> map) {
+    public static void hSetAll(String key, Map<String, ?> map) {
         getRedisTemplate().opsForHash().putAll(key, map);
     }
 
     
-    public void hDel(String key, Object... hashKey) {
+    public static void hDel(String key, Object... hashKey) {
         getRedisTemplate().opsForHash().delete(key, hashKey);
     }
 
     
-    public Boolean hHasKey(String key, String hashKey) {
+    public static Boolean hHasKey(String key, String hashKey) {
         return getRedisTemplate().opsForHash().hasKey(key, hashKey);
     }
 
     
-    public Long hIncr(String key, String hashKey, Long delta) {
+    public static Long hIncr(String key, String hashKey, Long delta) {
         return getRedisTemplate().opsForHash().increment(key, hashKey, delta);
     }
 
     
-    public Long hDecr(String key, String hashKey, Long delta) {
+    public static Long hDecr(String key, String hashKey, Long delta) {
         return getRedisTemplate().opsForHash().increment(key, hashKey, -delta);
     }
 
     
-    public Set<Object> sMembers(String key) {
+    public static Set<Object> sMembers(String key) {
         return getRedisTemplate().opsForSet().members(key);
     }
 
     
-    public Long sAdd(String key, Object... values) {
+    public static Long sAdd(String key, Object... values) {
         return getRedisTemplate().opsForSet().add(key, values);
     }
 
     
-    public Long sAdd(String key, long time, Object... values) {
+    public static Long sAdd(String key, long time, Object... values) {
         Long count = getRedisTemplate().opsForSet().add(key, values);
         expire(key, time);
         return count;
     }
 
     
-    public Boolean sIsMember(String key, Object value) {
+    public static Boolean sIsMember(String key, Object value) {
         return getRedisTemplate().opsForSet().isMember(key, value);
     }
 
     
-    public Long sSize(String key) {
+    public static Long sSize(String key) {
         return getRedisTemplate().opsForSet().size(key);
     }
 
     
-    public Long sRemove(String key, Object... values) {
+    public static Long sRemove(String key, Object... values) {
         return getRedisTemplate().opsForSet().remove(key, values);
     }
 
     
-    public List<Object> lRange(String key, long start, long end) {
+    public static List<Object> lRange(String key, long start, long end) {
         return getRedisTemplate().opsForList().range(key, start, end);
     }
 
     
-    public Long lSize(String key) {
+    public static Long lSize(String key) {
         return getRedisTemplate().opsForList().size(key);
     }
 
     
-    public Object lIndex(String key, long index) {
+    public static Object lIndex(String key, long index) {
         return getRedisTemplate().opsForList().index(key, index);
     }
 
     
-    public Long lPush(String key, Object value) {
+    public static Long lPush(String key, Object value) {
         return getRedisTemplate().opsForList().rightPush(key, value);
     }
 
     
-    public Long lPush(String key, Object value, long time) {
+    public static Long lPush(String key, Object value, long time) {
         Long index = getRedisTemplate().opsForList().rightPush(key, value);
         expire(key, time);
         return index;
     }
 
     
-    public Long lPushAll(String key, Object... values) {
+    public static Long lPushAll(String key, Object... values) {
         return getRedisTemplate().opsForList().rightPushAll(key, values);
     }
 
     
-    public Long lPushAll(String key, Long time, Object... values) {
+    public static Long lPushAll(String key, Long time, Object... values) {
         Long count = getRedisTemplate().opsForList().rightPushAll(key, values);
         expire(key, time);
         return count;
     }
 
     
-    public Long lRemove(String key, long count, Object value) {
+    public static Long lRemove(String key, long count, Object value) {
         return getRedisTemplate().opsForList().remove(key, count, value);
     }
 }
