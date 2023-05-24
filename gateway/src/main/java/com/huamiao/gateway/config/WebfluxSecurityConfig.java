@@ -2,13 +2,17 @@ package com.huamiao.gateway.config;
 
 import com.huamiao.gateway.compnent.*;
 import com.huamiao.gateway.util.JwtTokenUtil;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.authentication.DelegatingReactiveAuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
@@ -21,6 +25,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 /**
  * @author ShiLei
@@ -110,5 +115,13 @@ public class WebfluxSecurityConfig {
         managers.add(tokenAuthenticationManager);
         return new DelegatingReactiveAuthenticationManager(managers);
     }
+
+    // 启动报错 feign.codec.EncodeException
+    @Bean
+    @ConditionalOnMissingBean
+    public HttpMessageConverters messageConverters(ObjectProvider<HttpMessageConverter<?>> converters) {
+        return new HttpMessageConverters(converters.orderedStream().collect(Collectors.toList()));
+    }
+
 
 }

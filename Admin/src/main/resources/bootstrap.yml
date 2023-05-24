@@ -6,6 +6,7 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+        namespace: de2382b3-d71c-47d0-9f03-970226616150
       # 标注服务名
       config:
         name: HuamiaoAdmin
