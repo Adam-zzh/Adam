@@ -12,6 +12,9 @@ spring:
         namespace: de2382b3-d71c-47d0-9f03-970226616150
         server-addr: 127.0.0.1:8848 #Nacos地址
         file-extension: yaml
+        extension-configs:
+          - data-id: redis.yaml
+            group: common
 
 #超时配置
 feign:

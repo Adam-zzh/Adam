@@ -21,4 +21,13 @@ public class User {
 
     private Long expireSecond;
 
+    public User() {
+    }
+
+    public User(Long userId, String userName, String token, Long expireSecond) {
+        this.userId = userId;
+        this.userName = userName;
+        this.token = token;
+        this.expireSecond = expireSecond;
+    }
 }

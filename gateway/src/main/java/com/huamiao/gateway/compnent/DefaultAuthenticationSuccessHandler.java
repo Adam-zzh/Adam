@@ -1,6 +1,8 @@
 package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
+import com.huamiao.common.base.User;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.gateway.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class DefaultAuthenticationSuccessHandler implements ServerAuthentication
     @Value("${jwt.refresh}")
     private long jwtTokenRefreshExpired;
 
+    @Value("${jwt.expiration}")
+    private Long expiration;
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -44,11 +49,12 @@ public class DefaultAuthenticationSuccessHandler implements ServerAuthentication
             map.put("userId", userDetails.getUserId());
             map.put("username", userDetails.getUsername());
             map.put("roles",userDetails.getAuthorities());
-            String token = jwtTokenUtil.generateToken(map, userDetails.getUsername());
+            String token = jwtTokenUtil.generateToken(map, userDetails.getUsername(), expiration);
             String refreshToken = jwtTokenUtil.generateToken(map, userDetails.getUsername(), jwtTokenRefreshExpired);
             Map<String, Object> tokenMap = new HashMap<>(2);
             tokenMap.put("token", token);
             tokenMap.put("refreshToken", refreshToken);
+            UserSession.setUser(new User(userDetails.getUserId(), userDetails.getUsername(), token, expiration));
             DataBuffer dataBuffer = dataBufferFactory.wrap(JSONObject.toJSONString(ResponseVo.success(tokenMap)).getBytes());
             return response.writeWith(Mono.just(dataBuffer));
         }));

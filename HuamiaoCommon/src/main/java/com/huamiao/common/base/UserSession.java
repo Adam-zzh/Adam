@@ -1,7 +1,10 @@
 package com.huamiao.common.base;
 
 import com.huamiao.common.exception.Asserts;
+import com.huamiao.common.util.ApplicationUtil;
 import com.huamiao.common.util.RedisHelper;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -21,5 +24,19 @@ public class UserSession
         Object o = RedisHelper.get(token);
         if (o == null) Asserts.fail("用户身份失效, 请重新登陆");
         return (User) o;
+    }
+
+    public static User getUser(){
+        HttpServletRequest request = ApplicationUtil.getRequest();
+
+        return getUser(request.getHeader("Authorization"));
+    }
+
+    public static void clear(String token){
+        RedisHelper.del(token);
+    }
+
+    public static String getUserName(){
+        return getUser().getUserName();
     }
 }

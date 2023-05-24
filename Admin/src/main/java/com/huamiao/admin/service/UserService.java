@@ -3,13 +3,11 @@ package com.huamiao.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.json.JSONUtil;
 import com.huamiao.admin.dto.RolePermission;
 import com.huamiao.admin.dto.UserRole;
 import com.huamiao.admin.mapper.TUserMapper;
+import com.huamiao.admin.message.ProductMessage;
 import com.huamiao.admin.model.TPermission;
 import com.huamiao.admin.model.TUser;
 import com.huamiao.admin.model.TUserExample;
@@ -17,7 +15,6 @@ import com.huamiao.admin.util.IdHelper;
 import com.huamiao.admin.vo.userVo.RegistVo;
 import com.huamiao.admin.vo.userVo.UpdPwdVo;
 import com.huamiao.admin.vo.userVo.UpdUserVo;
-import com.huamiao.admin.vo.userVo.UserVo;
 import com.huamiao.common.constant.HuamiaoConst;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
@@ -25,9 +22,7 @@ import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.common.util.ConditionHelper;
 import com.huamiao.common.util.PageHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,57 +44,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Autowired
     private TUserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ProductMessage productMessage;
-
-    public ResponseVo login(UserVo userVo) {
-        String account = userVo.getAccount();
-        if (StrUtil.isEmpty(account)) {
-            return ResponseVo.failed("账号不能为空");
-        }
-        log.info("account={}", userVo.getAccount());
-        TUserExample userExample = new TUserExample();
-        userExample.createCriteria().andAccountEqualTo(account.trim()).andStatusEqualTo(HuamiaoConst.ZERO);
-
-        List<TUser> tUsers = userMapper.selectByExample(userExample);
-        if (CollectionUtil.isNotEmpty(tUsers)) {
-            TUser tUser = tUsers.get(0);
-            List<SimpleGrantedAuthority> authors = getPermissionValues(tUser.getId()).stream().map(item -> new SimpleGrantedAuthority(item)).collect(Collectors.toList());
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(account, null, authors);
-            if (passwordEncoder.matches(userVo.getPassword(), tUser.getPassword())) {
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                //生成token
-                String token = jwtTokenUtil.generateToken(tUser.getUserName(), tUser.getAccount());
-
-                //更新user最新登陆时间
-                tUser.setLoginTime(new Date());
-                userMapper.updateByPrimaryKeySelective(tUser);
-
-                String keyOfUser = RedisUtil.getKeyOfUser(tUser.getUserName(), tUser.getAccount());
-                RedisUtil.setUserInfo(keyOfUser, tUser);
-
-                UpdUserVo user = new UpdUserVo();
-                BeanUtils.copyProperties(tUser, user);
-                Map<String, Object> map = new HashMap<>();
-                map.put("tokenHead", tokenHead);
-                map.put("token", token);
-                map.put("data", user);
-                return ResponseVo.success(map, "登陆成功");
-            }
-        } else {
-            return ResponseVo.failed("账号密码错误");
-        }
-
-        return ResponseVo.failed("账号密码错误");
-    }
-
 
     /**
      * 用户注册接口
@@ -133,8 +81,6 @@ public class UserService {
         int i = userMapper.insertSelective(tUser);
 
         if (i > 0) {
-            boolean b = productMessage.produceUserMsg(JSONUtil.toJsonStr(tUser));
-            log.info("推送一个用户到rabbitMq，"+(b ?"success":"fail"));
             return ResponseVo.success("注册成功");
         }
 
@@ -161,11 +107,6 @@ public class UserService {
             int i = userMapper.updateByExample(user, userExample);
 
             if (i > 0) {
-//                SessionUtil.removeAttribute(ConstUtil.REDIS_USER);
-//                SessionUtil.setAttribute(ConstUtil.REDIS_USER, user);
-                RedisUtil.delUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()));
-                RedisUtil.setUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()), user);
-
                 return ResponseVo.success("更新成功");
             } else {
                 return ResponseVo.failed("更新失败");
@@ -188,24 +129,6 @@ public class UserService {
 
     }
 
-    public UserRole getUserInfoByUserId(Long userId) {
-        log.info("开始获得用户数据");
-        UserRole user = (UserRole) ServletUtil.getRequest().getSession().getAttribute("user");
-        if (user != null) {
-            return user;
-        }
-
-        UserRole userRole = userMapper.selectUserInfoByUserId(userId);
-        log.info("从数据库获得了用户数据");
-
-        if (userRole != null) {
-//            SessionUtil.setAttribute("user", userRole);
-            RedisUtil.setUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()), userRole);
-        }
-
-        return userRole;
-    }
-
     public ResponseVo delUser(Long userId) {
         TUserExample userExample = new TUserExample();
         userExample.createCriteria().andIdEqualTo(userId);
@@ -218,12 +141,8 @@ public class UserService {
             int i = userMapper.updateByPrimaryKey(tUser);
 
             if (i > 0) {
-//                SessionUtil.removeAttribute("user");
-//                UserRole user = SessionUtil.getAttribute("user", UserRole.class);
-                RedisUtil.delUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()));
-                TUser user = RedisUtil.getUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()));
-
-                log.info(user.getUserName() + "删掉了用户{}", tUser.getUserName());
+                // todo 清除掉内存中的用户
+                log.info(tUser.getUserName() + "删掉了用户{}", tUser.getUserName());
                 return ResponseVo.success("删除成功");
 
             }
@@ -232,8 +151,6 @@ public class UserService {
     }
 
     public ResponseVo logout() {
-//        SessionUtil.removeAttribute("user");
-        RedisUtil.delUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()));
         return ResponseVo.success("你已退出");
     }
 

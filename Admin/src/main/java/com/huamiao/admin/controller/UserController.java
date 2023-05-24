@@ -31,12 +31,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation("登录入口")
-    @PostMapping("/login")
-    public ResponseVo login(@Validated @RequestBody UserVo userVo){
-        return userService.login(userVo);
-    }
-
     @ApiOperation("注册")
     @PostMapping("/register")
     public ResponseVo register(@Validated @RequestBody RegistVo registVo){

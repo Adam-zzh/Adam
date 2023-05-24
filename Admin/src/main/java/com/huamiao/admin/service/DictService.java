@@ -5,6 +5,8 @@ import com.huamiao.admin.model.TDict;
 import com.huamiao.admin.model.TDictExample;
 import com.huamiao.admin.model.TUser;
 import com.huamiao.admin.util.IdHelper;
+import com.huamiao.common.base.User;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.common.util.RedisHelper;
 import org.springframework.beans.BeanUtils;
@@ -32,15 +34,14 @@ public class DictService {
 
     @Transactional
     public ResponseVo updOrSaveDict(TDict dict) {
-//        UserRole us = SessionUtil.getAttribute(ConstUtil.REDIS_USER, UserRole.class);
-        TUser us = RedisHelper.getUserInfo(RedisUtil.getKeyOfUser(jwtTokenUtil.getSubjectByToken()));
-        int i = 0;
+        User us = UserSession.getUser();
+        int i;
         if (dict.getId() == null) {
             dict.setId(IdHelper.generateLongId());
             dict.setCreateTime(new Date());
             dict.setUpdateTime(new Date());
-            dict.setCreateId(us.getId());
-            dict.setUpdateId(us.getId());
+            dict.setCreateId(us.getUserId());
+            dict.setUpdateId(us.getUserId());
 
             i = dictMapper.insertSelective(dict);
         } else {
@@ -54,8 +55,8 @@ public class DictService {
             BeanUtils.copyProperties(dict, tDict);
             tDict.setCreateTime(new Date());
             tDict.setUpdateTime(new Date());
-            tDict.setCreateId(us.getId());
-            tDict.setUpdateId(us.getId());
+            tDict.setCreateId(us.getUserId());
+            tDict.setUpdateId(us.getUserId());
 
             i = dictMapper.updateByPrimaryKeySelective(tDict);
 
