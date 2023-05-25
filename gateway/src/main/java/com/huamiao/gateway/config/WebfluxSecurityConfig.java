@@ -1,11 +1,8 @@
 package com.huamiao.gateway.config;
 
 import com.huamiao.gateway.compnent.*;
-import com.huamiao.gateway.util.JwtTokenUtil;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -88,6 +85,7 @@ public class WebfluxSecurityConfig {
                 .and()
                 .csrf().disable()
         ;
+
         return httpSecurity.build();
 
     }

@@ -1,8 +1,8 @@
 package com.huamiao.common.base;
 
 import com.huamiao.common.exception.Asserts;
-import com.huamiao.common.util.ApplicationUtil;
 import com.huamiao.common.util.RedisHelper;
+import com.huamiao.common.util.ServletHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +27,7 @@ public class UserSession
     }
 
     public static User getUser(){
-        HttpServletRequest request = ApplicationUtil.getRequest();
+        HttpServletRequest request = ServletHelper.getRequest();
 
         return getUser(request.getHeader("Authorization"));
     }

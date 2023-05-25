@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements ReactiveUserDetailsService {
         User user = userClient.findByUserName(username).getData();
         SecurityUserDetails securityUserDetails = new SecurityUserDetails(
                 user.getUserName(),
-                passwordEncoder.encode(user.getPassword()),
+                user.getPassword(),
                 true,
                 true,
                 true,

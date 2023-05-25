@@ -23,6 +23,7 @@ import com.huamiao.common.util.ConditionHelper;
 import com.huamiao.common.util.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TUserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 用户注册接口
@@ -172,14 +176,14 @@ public class UserServiceImpl implements UserService {
     public ResponseVo<Boolean> resetPwd(String account) {
         TUserExample example = new TUserExample();
         example.createCriteria()
-                .andStatusEqualTo(UserStatusEnum.DISABLED.getCode())
+                .andStatusEqualTo(UserStatusEnum.NORMAL.getCode())
                 .andAccountEqualTo(account);
         List<TUser> tUsers = userMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(tUsers)) {
             return ResponseVo.failed("更新失败哦");
         }
         TUser tUser = tUsers.get(0);
-        tUser.setPassword("123456");
+        tUser.setPassword(passwordEncoder.encode("123456"));
         userMapper.updateByPrimaryKeySelective(tUser);
         return ResponseVo.success(null, "重置成功");
     }

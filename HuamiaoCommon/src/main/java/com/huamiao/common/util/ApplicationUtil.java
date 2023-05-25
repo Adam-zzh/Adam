@@ -32,22 +32,6 @@ public class ApplicationUtil implements ApplicationContextAware {
     }
 
     /**
-     * 获得HttpServletRequest对象
-     * @return HttpServletRequest对象
-     */
-    public static HttpServletRequest getRequest(){
-        return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-    }
-
-    /**
-     *   获得HttpServletResponse对象
-     *    @return HttpServletResponse对象
-     */
-    public static HttpServletResponse getResponse(){
-        return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-    }
-
-    /**
      * 通过name获取Bean
      * @param name
      * @return
