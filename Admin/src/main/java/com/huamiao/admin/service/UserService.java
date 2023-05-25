@@ -1,7 +1,7 @@
 package com.huamiao.admin.service;
 
 import com.huamiao.admin.model.TUser;
-import com.huamiao.admin.vo.userVo.RegistVo;
+import com.huamiao.admin.vo.userVo.RegisterVo;
 import com.huamiao.admin.vo.userVo.UpdPwdVo;
 import com.huamiao.admin.vo.userVo.UpdUserVo;
 import com.huamiao.common.entity.BaseParam;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 public interface UserService {
 
-    ResponseVo<Boolean> register(RegistVo registVo);
+    ResponseVo<Boolean> register(RegisterVo registVo);
 
     ResponseVo<Boolean> updOrSave(UpdUserVo updUserVo);
 

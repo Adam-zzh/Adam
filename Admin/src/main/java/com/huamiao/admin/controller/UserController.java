@@ -2,7 +2,7 @@ package com.huamiao.admin.controller;
 
 import com.huamiao.admin.model.TUser;
 import com.huamiao.admin.service.UserService;
-import com.huamiao.admin.vo.userVo.RegistVo;
+import com.huamiao.admin.vo.userVo.RegisterVo;
 import com.huamiao.admin.vo.userVo.UpdPwdVo;
 import com.huamiao.admin.vo.userVo.UpdUserVo;
 import com.huamiao.common.entity.BaseParam;
@@ -32,7 +32,7 @@ public class UserController {
 
     @ApiOperation("注册")
     @PostMapping("/register")
-    public ResponseVo register(@Validated @RequestBody RegistVo registVo){
+    public ResponseVo register(@Validated @RequestBody RegisterVo registVo){
         return userService.register(registVo);
     }
 

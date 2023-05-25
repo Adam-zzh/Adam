@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
  * @since 1.0.0
  */
 @Data
-public class RegistVo {
+public class RegisterVo {
 
     @NotEmpty(message="账号不能为空")
     @ApiModelProperty("用户账号")

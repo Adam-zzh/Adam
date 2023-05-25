@@ -13,11 +13,9 @@ import com.huamiao.admin.model.TUserExample;
 import com.huamiao.admin.service.UserService;
 import com.huamiao.admin.util.IdHelper;
 import com.huamiao.admin.util.ObjectHelper;
-import com.huamiao.admin.vo.userVo.RegistVo;
+import com.huamiao.admin.vo.userVo.RegisterVo;
 import com.huamiao.admin.vo.userVo.UpdPwdVo;
 import com.huamiao.admin.vo.userVo.UpdUserVo;
-import com.huamiao.common.base.User;
-import com.huamiao.common.constant.HuamiaoConst;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
 import com.huamiao.common.entity.ResponseVo;
@@ -52,7 +50,7 @@ public class UserServiceImpl implements UserService {
      * @param registVo
      * @return
      */
-    public ResponseVo<Boolean> register(RegistVo registVo) {
+    public ResponseVo<Boolean> register(RegisterVo registVo) {
         TUser tUser = new TUser();
         //copy 请求参数对象到dao层对象中
         HashMap<String, String> mapping = CollUtil.newHashMap();

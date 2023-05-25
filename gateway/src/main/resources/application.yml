@@ -37,3 +37,6 @@ secure:
       - /*/login
       - /*/register
       - /*/public/*
+      - /
+      - /login
+      - /loginPage
