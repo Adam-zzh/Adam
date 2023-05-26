@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisHelper {
 
     private static RedisTemplate<String, Object> getRedisTemplate(){
-        return ApplicationUtil.getBean(RedisTemplate.class);
+        return ApplicationUtil.getBean("redisTemplate", RedisTemplate.class);
     }
     
     public static void set(String key, Object value, long time) {

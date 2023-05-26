@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
+    @ConditionalOnMissingBean(RedisTemplate.class)
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 //        RedisSerializer<Object> serializer = redisSerializer();
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
