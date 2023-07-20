@@ -1,9 +1,8 @@
 package com.huamiao.blog.message;
 
 import cn.hutool.json.JSONUtil;
-import com.smallhua.org.mapper.TUserMirMapper;
-import com.smallhua.org.model.TUserMir;
-import com.smallhua.org.stream.channel.MySink;
+import com.huamiao.blog.mapper.TUserMirMapper;
+import com.huamiao.blog.model.TUserMir;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;

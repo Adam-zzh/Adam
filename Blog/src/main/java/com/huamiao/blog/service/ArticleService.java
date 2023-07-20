@@ -12,18 +12,18 @@ import com.huamiao.blog.model.TArticleLabel;
 import com.huamiao.blog.model.TArticleLabelExample;
 import com.huamiao.blog.util.IdHelper;
 import com.huamiao.blog.vo.ArticleVo;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
 import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.common.util.ConditionHelper;
 import com.huamiao.common.util.PageHelper;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -38,35 +38,32 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
     @Autowired
-    private ArticleMapper articleMapper;
-    @Autowired
     private TArticleMapper tArticleMapper;
     @Autowired
     private TArticleLabelMapper tArticleLabelMapper;
 
-    public PageVo<ArticleVo> selAllArticles(BaseParam baseParam) {
+    public PageVo<TArticle> selAllArticles(BaseParam baseParam) {
         if (StrUtil.isEmpty(baseParam.getOrderBy())){
             baseParam.setOrderBy("IF_TOP DESC, CRE_TIME DESC");
         }
-        TArticleExample example = new ArticleExampleDefine();
+        TArticleExample example = new TArticleExample();
         TArticleExample.Criteria criteriaDefine = example.createCriteria();
 
-        ConditionHelper.createCondition(baseParam, criteriaDefine, ArticleDefine.class);
-        PageVo<ArticleVo> pagination = PageHelper.pagination(baseParam, () -> articleMapper.selectByExampleWithBLOBs(example));
+        ConditionHelper.createCondition(baseParam, criteriaDefine, TArticle.class);
+        PageVo<TArticle> pagination = PageHelper.pagination(baseParam, () -> tArticleMapper.selectByExampleWithBLOBs(example));
         if (pagination.getTotalPage() != 0 && pagination.getTotalPage() < pagination.getPageNum()){
             baseParam.setPage(pagination.getTotalPage());
-            pagination = PageHelper.pagination(baseParam, () -> articleMapper.selectByExampleWithBLOBs(example));
+            pagination = PageHelper.pagination(baseParam, () -> tArticleMapper.selectByExampleWithBLOBs(example));
         }
-        pagination.getList().stream().map(item -> {renderYMD(item); return item;}).collect(Collectors.toList());
         return pagination;
     }
 
     public ResponseVo<ArticleVo> selArticleById(Long articleId) {
-        TArticleExample example = new ArticleExampleDefine();
+        TArticleExample example = new TArticleExample();
         TArticleExample.Criteria criteriaDefine = example.createCriteria();
 
         criteriaDefine.andIdEqualTo(articleId);
-        return ResponseVo.success(articleMapper.selectByExampleWithBLOBs(example).get(0));
+        return ResponseVo.success(tArticleMapper.selectByExampleWithBLOBs(example).get(0));
     }
 
     public ResponseVo saveOrUpdArticle(ArticleVo articleVo) {
@@ -78,16 +75,16 @@ public class ArticleService {
             articleVo.setId(IdHelper.generateLongId());
             BeanUtil.copyProperties(articleVo, tArticle);
             tArticle.setCreTime(DateUtil.date());
-            tArticle.setCreId(SessionHelper.currentUserId());
+            tArticle.setCreId(UserSession.getUser().getUserId());
             tArticle.setUpdTime(DateUtil.date());
-            tArticle.setUpdId(SessionHelper.currentUserId());
+            tArticle.setUpdId(UserSession.getUser().getUserId());
 
             tArticleMapper.insertSelective(tArticle);
         }else {
             tArticle = tArticleMapper.selectByPrimaryKey(articleVo.getId());
             BeanUtil.copyProperties(articleVo, tArticle);
             tArticle.setUpdTime(DateUtil.date());
-            tArticle.setUpdId(SessionHelper.currentUserId());
+            tArticle.setUpdId(UserSession.getUser().getUserId());
 
             tArticleMapper.updateByPrimaryKeySelective(tArticle);
         }
@@ -124,11 +121,4 @@ public class ArticleService {
         return ResponseVo.success(null);
     }
 
-    private void renderYMD(ArticleVo articleVo){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(articleVo.getCreTime());
-        articleVo.setYear(cal.get(Calendar.YEAR));
-        articleVo.setMonth(cal.get(Calendar.MONTH)+ 1);
-        articleVo.setDate(cal.get(Calendar.DATE));
-    }
 }

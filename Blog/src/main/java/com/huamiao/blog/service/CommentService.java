@@ -5,6 +5,7 @@ import com.huamiao.blog.mapper.TCommentMapper;
 import com.huamiao.blog.model.TComment;
 import com.huamiao.blog.model.TCommentExample;
 import com.huamiao.blog.util.IdHelper;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.constant.HuamiaoConst;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.ResponseVo;
@@ -32,8 +33,6 @@ public class CommentService {
     @Autowired
     private TCommentMapper tCommentMapper;
     @Autowired
-    private CommentMapper commentMapper;
-    @Autowired
     private MessageService messageService;
 
 
@@ -46,12 +45,9 @@ public class CommentService {
         criteria.andPidEqualTo(0l);
 
         ConditionHelper.createCondition(baseParam, criteria, TComment.class);
-//        CommonPage<CommentVo> pagination = PageUtil.pagination(baseParam, () -> commentMapper.selectByExample(example));
-//        List<CommentVo> tree = TreeUtil.createTree();
-//        pagination.setList(tree);
 
         Map data = new HashMap();
-        data.put("list", commentMapper.selectByExample(example));
+        data.put("list", tCommentMapper.selectByExample(example));
         data.put("total", l);
 
         return ResponseVo.success(data);
@@ -74,11 +70,11 @@ public class CommentService {
             comment.setFullPath(sb.toString());
         }
         comment.setId(id);
-        comment.setCreId(SessionHelper.currentUserId());
+        comment.setCreId(UserSession.getUser().getUserId());
         comment.setCreTime(DateUtil.date());
-        comment.setUpdId(SessionHelper.currentUserId());
+        comment.setUpdId(UserSession.getUser().getUserId());
         comment.setUpdTime(DateUtil.date());
-        comment.setSourceId(SessionHelper.currentUserId());
+        comment.setSourceId(UserSession.getUser().getUserId());
 
         int i = tCommentMapper.insertSelective(comment);
 
@@ -98,7 +94,7 @@ public class CommentService {
         TComment tComment = tCommentMapper.selectByPrimaryKey(id);
 
         tComment.setIsDel(HuamiaoConst.ONE);
-        tComment.setUpdId(SessionHelper.currentUserId());
+        tComment.setUpdId(UserSession.getUser().getUserId());
         tComment.setUpdTime(DateUtil.date());
         int i = tCommentMapper.updateByPrimaryKeySelective(tComment);
 

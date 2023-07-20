@@ -555,52 +555,52 @@ public class TLeavemsgExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDelEqualTo(Byte value) {
+        public Criteria andIsDelEqualTo(Integer value) {
             addCriterion("IS_DEL =", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelNotEqualTo(Byte value) {
+        public Criteria andIsDelNotEqualTo(Integer value) {
             addCriterion("IS_DEL <>", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelGreaterThan(Byte value) {
+        public Criteria andIsDelGreaterThan(Integer value) {
             addCriterion("IS_DEL >", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsDelGreaterThanOrEqualTo(Integer value) {
             addCriterion("IS_DEL >=", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelLessThan(Byte value) {
+        public Criteria andIsDelLessThan(Integer value) {
             addCriterion("IS_DEL <", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelLessThanOrEqualTo(Byte value) {
+        public Criteria andIsDelLessThanOrEqualTo(Integer value) {
             addCriterion("IS_DEL <=", value, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelIn(List<Byte> values) {
+        public Criteria andIsDelIn(List<Integer> values) {
             addCriterion("IS_DEL in", values, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelNotIn(List<Byte> values) {
+        public Criteria andIsDelNotIn(List<Integer> values) {
             addCriterion("IS_DEL not in", values, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelBetween(Byte value1, Byte value2) {
+        public Criteria andIsDelBetween(Integer value1, Integer value2) {
             addCriterion("IS_DEL between", value1, value2, "isDel");
             return (Criteria) this;
         }
 
-        public Criteria andIsDelNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsDelNotBetween(Integer value1, Integer value2) {
             addCriterion("IS_DEL not between", value1, value2, "isDel");
             return (Criteria) this;
         }

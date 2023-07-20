@@ -7,6 +7,7 @@ import com.huamiao.blog.mapper.*;
 import com.huamiao.blog.model.*;
 import com.huamiao.blog.util.IdHelper;
 import com.huamiao.blog.websocket.WebSocket;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
 import com.huamiao.common.entity.ResponseVo;
@@ -48,7 +49,7 @@ public class MessageService {
         TMessageExample example = new TMessageExample();
         example.setOrderByClause("CRE_TIME DESC");
         example.createCriteria()
-                .andTargetIdEqualTo(SessionHelper.currentUserId())
+                .andTargetIdEqualTo(UserSession.getUser().getUserId())
                 .andIfReadEqualTo((byte) 0);
         List<TMessage> tMessages = tMessageMapper.selectByExample(example);
         return tMessages;
@@ -58,7 +59,7 @@ public class MessageService {
         TMessageExample example = new TMessageExample();
         example.setOrderByClause("CRE_TIME DESC");
         TMessageExample.Criteria criteria = example.createCriteria();
-        criteria.andTargetIdEqualTo(SessionHelper.currentUserId())
+        criteria.andTargetIdEqualTo(UserSession.getUser().getUserId())
                 .andTypeEqualTo(type);
         ConditionHelper.createCondition(baseParam, criteria, TMessage.class);
         PageVo<TMessage> pagination = PageHelper.pagination(baseParam, () -> tMessageMapper.selectByExample(example));
@@ -71,7 +72,7 @@ public class MessageService {
         message.setId(id);
         message.setIfRead((byte) 1);
         message.setUpdTime(DateUtil.date());
-        message.setUpdId(SessionHelper.currentUserId());
+        message.setUpdId(UserSession.getUser().getUserId());
         int i = tMessageMapper.updateByPrimaryKeySelective(message);
 
         if (i > 0) {
@@ -103,7 +104,7 @@ public class MessageService {
             message.setTitle(sb.toString());
             message.setContent(comment.getContent());
             message.setType((byte) 0);
-            message.setCreId(SessionHelper.currentUserId());
+            message.setCreId(UserSession.getUser().getUserId());
             message.setCreTime(comment.getCreTime());
             message.setUpdId(comment.getUpdId());
             message.setUpdTime(comment.getUpdTime());
@@ -126,7 +127,7 @@ public class MessageService {
             message.setTargetId(1388434861433425920l);
             message.setContent(comment.getContent());
             message.setType((byte) 0);
-            message.setCreId(SessionHelper.currentUserId());
+            message.setCreId(UserSession.getUser().getUserId());
             message.setCreTime(comment.getCreTime());
             message.setUpdId(comment.getUpdId());
             message.setUpdTime(comment.getUpdTime());
@@ -137,7 +138,7 @@ public class MessageService {
        /* TMessageExample example = new TMessageExample();
         example.setOrderByClause("CRE_TIME DESC");
         example.createCriteria()
-                .andTargetIdEqualTo(SessionHelper.currentUserId())
+                .andTargetIdEqualTo(UserSession.getUser().getUserId())
                 .andIfReadEqualTo((byte) 0);
         List<TMessage> tMessages = tMessageMapper.selectByExample(example);
 
@@ -173,7 +174,7 @@ public class MessageService {
             message.setTitle(sb.toString());
             message.setContent(leavemsg.getContent());
             message.setType((byte) 0);
-            message.setCreId(SessionHelper.currentUserId());
+            message.setCreId(UserSession.getUser().getUserId());
             message.setCreTime(leavemsg.getCreTime());
             message.setUpdId(leavemsg.getUpdId());
             message.setUpdTime(leavemsg.getUpdTime());
@@ -196,7 +197,7 @@ public class MessageService {
             message.setTargetId(leavemsg.getTargetId());
             message.setContent(leavemsg.getContent());
             message.setType((byte) 0);
-            message.setCreId(SessionHelper.currentUserId());
+            message.setCreId(UserSession.getUser().getUserId());
             message.setCreTime(leavemsg.getCreTime());
             message.setUpdId(leavemsg.getUpdId());
             message.setUpdTime(leavemsg.getUpdTime());

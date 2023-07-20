@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class LabelService {
-    @Autowired
+    /*@Autowired
     private LabelMapper labelMapper;
 
 
@@ -56,5 +56,5 @@ public class LabelService {
         rightPanelVo.setTypes(types);
         rightPanelVo.setLabels(labels);
         return new ResponseVo().success(rightPanelVo);
-    }
+    }*/
 }

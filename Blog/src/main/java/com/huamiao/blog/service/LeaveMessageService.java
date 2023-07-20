@@ -1,12 +1,12 @@
 package com.huamiao.blog.service;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.PageUtil;
 import com.huamiao.blog.mapper.TLeavemsgMapper;
 import com.huamiao.blog.model.TLeavemsg;
 import com.huamiao.blog.model.TLeavemsgExample;
 import com.huamiao.blog.util.IdHelper;
 import com.huamiao.blog.vo.LefMsgVo;
+import com.huamiao.common.base.UserSession;
 import com.huamiao.common.constant.HuamiaoConst;
 import com.huamiao.common.entity.BaseParam;
 import com.huamiao.common.entity.PageVo;
@@ -35,15 +35,13 @@ public class LeaveMessageService {
     private TLeavemsgMapper tLeavemsgMapper;
     @Autowired
     private MessageService messageService;
-    @Autowired
-    private LefMsgMapper lefMsgMapper;
 
 
     public ResponseVo saveOrUpdateLeaveMsg(TLeavemsg leaveMsg) {
         Long id = leaveMsg.getId()==null ? IdHelper.generateLongId() : leaveMsg.getId();
-        leaveMsg.setSourceId(SessionHelper.currentUserId());
+        leaveMsg.setSourceId(UserSession.getUser().getUserId());
         leaveMsg.setUpdTime(DateUtil.date());
-        leaveMsg.setUpdId(SessionHelper.currentUserId());
+        leaveMsg.setUpdId(UserSession.getUser().getUserId());
 
         if (leaveMsg.getPid() == 0l) {
             leaveMsg.setFullPath("/" + id);
@@ -62,7 +60,7 @@ public class LeaveMessageService {
         if (leaveMsg.getId() == null) {
             //新增
             leaveMsg.setId(id);
-            leaveMsg.setCreId(SessionHelper.currentUserId());
+            leaveMsg.setCreId(UserSession.getUser().getUserId());
             leaveMsg.setCreTime(DateUtil.date());
             tLeavemsgMapper.insertSelective(leaveMsg);
             messageService.pushLeaveMessage(leaveMsg);
@@ -79,7 +77,7 @@ public class LeaveMessageService {
         leaveMsg.setId(id);
         leaveMsg.setIsDel((byte) 1);
         leaveMsg.setUpdTime(DateUtil.date());
-        leaveMsg.setUpdId(SessionHelper.currentUserId());
+        leaveMsg.setUpdId(UserSession.getUser().getUserId());
 
         tLeavemsgMapper.updateByPrimaryKeySelective(leaveMsg);
         return ResponseVo.success(null);
@@ -94,6 +92,6 @@ public class LeaveMessageService {
 
         ConditionHelper.createCondition(baseParam, criteria, LefMsgVo.class);
 
-        return PageHelper.pagination(baseParam, () -> lefMsgMapper.selectByExample(leavemsgExample));
+        return PageHelper.pagination(baseParam, () -> tLeavemsgMapper.selectByExample(leavemsgExample));
     }
 }

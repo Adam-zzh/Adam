@@ -23,7 +23,7 @@ public class TComment implements Serializable {
     private Long articleId;
 
     @ApiModelProperty(value = "是否删除 0否 1是")
-    private Byte isDel;
+    private Integer isDel;
 
     @ApiModelProperty(value = "全限定路径")
     private String fullPath;
@@ -89,11 +89,11 @@ public class TComment implements Serializable {
         this.articleId = articleId;
     }
 
-    public Byte getIsDel() {
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Byte isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 
