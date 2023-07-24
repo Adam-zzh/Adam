@@ -1,5 +1,6 @@
 package com.huamiao.blog.controller;
 
+import com.google.common.collect.Lists;
 import com.huamiao.blog.service.LabelService;
 import com.huamiao.common.entity.ResponseVo;
 import io.swagger.annotations.Api;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -27,19 +29,19 @@ public class LabelController {
 
     @ApiOperation("发布文章-》添加标签级联查询")
     @GetMapping("labels")
-    public ResponseVo getAllLabels(){
-        return labelService.getAllLabels();
+    public ResponseVo<List<Object>> getAllLabels(){
+        return ResponseVo.success(Lists.newArrayList());
     }
 
     @ApiOperation("文章列表-》右侧面板")
     @GetMapping("rightPanel")
-    public ResponseVo rightPanel(){
-        return labelService.rightPanel();
+    public ResponseVo<Object> rightPanel(){
+        return ResponseVo.success(null);
     }
 
     @ApiOperation("文章列表-》右侧面板")
     @GetMapping("public/rightPanel")
-    public ResponseVo publicRightPanel(){
-        return labelService.rightPanel();
+    public ResponseVo<Object> publicRightPanel(){
+        return ResponseVo.success(null);
     }
 }

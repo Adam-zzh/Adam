@@ -58,7 +58,7 @@ public class ArticleService {
         return pagination;
     }
 
-    public ResponseVo<ArticleVo> selArticleById(Long articleId) {
+    public ResponseVo<TArticle> selArticleById(Long articleId) {
         TArticleExample example = new TArticleExample();
         TArticleExample.Criteria criteriaDefine = example.createCriteria();
 

@@ -98,7 +98,7 @@ public class MessageService {
             message.setTargetId(comment.getTargetId());
             message.setIfRead((byte) 0);
             sb.append("<span>");
-            sb.append(SessionHelper.currentUser().getUserName());
+            sb.append(UserSession.getUserName());
             sb.append("回复了你的评论<a class=\"msg-comment\" @click=\"tiaozhuan(" + comment.getPid() + ",'0')\">" + tComment.getContent() + "</a>");
             sb.append("</span>");
             message.setTitle(sb.toString());
@@ -113,14 +113,14 @@ public class MessageService {
         }
 
         if (!Long.valueOf(1388434861433425920l).equals(comment.getTargetId())) {
-            message.setId(IdHelper.generateId());
+            message.setId(IdHelper.generateLongId());
             message.setSourceId(comment.getSourceId());
             message.setIfRead((byte) 0);
             Long articleId = comment.getArticleId();
             TArticle tArticle = tArticleMapper.selectByPrimaryKey(articleId);
             if (sb.length() > 0) sb.delete(0, sb.length() - 1);
             sb.append("<span>");
-            sb.append(SessionHelper.currentUser().getUserName());
+            sb.append(UserSession.getUserName());
             sb.append("对你的文章<a class=\"msg-comment\" @click=\"tiaozhuan(" + articleId + ")\">" + tArticle.getTitle() + "</a>进行了评论");
             sb.append("</span>");
             message.setTitle(sb.toString());
@@ -168,7 +168,7 @@ public class MessageService {
             message.setTargetId(1388434861433425920l);
             message.setIfRead((byte) 0);
             sb.append("<span>");
-            sb.append(SessionHelper.currentUser().getUserName());
+            sb.append(UserSession.getUserName());
             sb.append("对你进行了留言");
             sb.append("</span>");
             message.setTitle(sb.toString());
@@ -190,7 +190,7 @@ public class MessageService {
             message.setIfRead((byte) 0);
             if (sb.length() > 0) sb.delete(0, sb.length());
             sb.append("<span class='leaveMsg' @click='openLeaveMsg(" + leavemsg.getPid() + ")'>");
-            sb.append(SessionHelper.currentUser().getUserName());
+            sb.append(UserSession.getUserName());
             sb.append("回复了你的留言");
             sb.append("</span>");
             message.setTitle(sb.toString());

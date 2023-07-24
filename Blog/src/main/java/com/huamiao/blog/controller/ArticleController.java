@@ -1,5 +1,6 @@
 package com.huamiao.blog.controller;
 
+import com.huamiao.blog.model.TArticle;
 import com.huamiao.blog.service.ArticleService;
 import com.huamiao.blog.vo.ArticleVo;
 import com.huamiao.common.entity.BaseParam;
@@ -28,24 +29,24 @@ public class ArticleController {
 
     @ApiOperation("查询所有文章")
     @PostMapping(value = "articles")
-    public PageVo<ArticleVo> selAllArticles(@RequestBody BaseParam baseParam){
+    public PageVo<TArticle> selAllArticles(@RequestBody BaseParam baseParam){
         return articleService.selAllArticles(baseParam);
     }
     @ApiOperation("查询所有文章")
     @PostMapping(value = "public/articles")
-    public PageVo<ArticleVo> publicArticles(@RequestBody BaseParam baseParam){
+    public PageVo<TArticle> publicArticles(@RequestBody BaseParam baseParam){
         return articleService.selAllArticles(baseParam);
     }
 
     @ApiOperation("查询文章")
     @GetMapping(value = "article/{articleId}")
-    public ResponseVo<ArticleVo> selArticleById(@PathVariable("articleId") Long articleId){
+    public ResponseVo<TArticle> selArticleById(@PathVariable("articleId") Long articleId){
         return articleService.selArticleById(articleId);
     }
 
     @ApiOperation("查询文章")
     @GetMapping(value = "public/article/{articleId}")
-    public ResponseVo<ArticleVo> publicArticle(@PathVariable("articleId") Long articleId){
+    public ResponseVo<TArticle> publicArticle(@PathVariable("articleId") Long articleId){
         return articleService.selArticleById(articleId);
     }
 
