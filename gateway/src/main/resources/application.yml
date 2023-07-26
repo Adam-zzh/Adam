@@ -43,6 +43,7 @@ secure:
       - /*/login
       - /*/register
       - /*/public/*
+      - /*/test/*
       - /
       - /login
       - /loginPage

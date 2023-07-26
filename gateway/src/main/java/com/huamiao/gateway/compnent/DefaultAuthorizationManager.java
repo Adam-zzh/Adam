@@ -2,8 +2,11 @@ package com.huamiao.gateway.compnent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huamiao.common.entity.ResponseVo;
+import com.huamiao.gateway.config.IgnoreUrlsConfig;
 import com.huamiao.gateway.enums.UserStatusCodeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -26,21 +29,32 @@ import java.util.Collection;
  */
 @Component
 @Slf4j
+@EnableConfigurationProperties(IgnoreUrlsConfig.class)
 public class DefaultAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    @Autowired
+    IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext authorizationContext) {
         return authentication.map(auth -> {
             ServerWebExchange exchange = authorizationContext.getExchange();
             ServerHttpRequest request = exchange.getRequest();
+            String path = request.getURI().getPath();
+
+            for (String url : ignoreUrlsConfig.getUrls()) {
+                if (this.antPathMatcher.match(url,path)) {
+                    log.info(String.format("拦截白名单 Path:{%s} ", path));
+                    return new AuthorizationDecision(true);
+                }
+            }
+
 
             Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
             for (GrantedAuthority authority : authorities) {
                 String authorityAuthority = authority.getAuthority();
-                String path = request.getURI().getPath();
 
                 // TODO
                 // 查询用户访问所需角色进行对比
