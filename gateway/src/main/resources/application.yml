@@ -22,9 +22,9 @@ server:
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: zzh-secret #JWT加解密使用的密钥
-  expiration: 3600 #JWT的超期限时间(60*60*24*7)
+  expiration: 18000 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
-  refresh: 300
+  refresh: 300000
 
 secure:
   ignored:

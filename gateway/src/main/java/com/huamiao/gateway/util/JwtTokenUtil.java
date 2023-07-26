@@ -143,7 +143,7 @@ public class JwtTokenUtil {
      * 生成token的过期时间
      */
     private static Date calculateExpirationDate(Date createdDate, long expiration) {
-        return new Date(createdDate.getTime() + expiration);
+        return new Date(createdDate.getTime() + expiration*1000l);
     }
 
     /**
