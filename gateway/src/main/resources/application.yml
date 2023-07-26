@@ -1,13 +1,19 @@
 spring:
   cloud:
     gateway:
+      discovery:
+        locator:
+          # 开启从注册中心动态创建路由的功能，利用微服务名进行路由
+          enabled: true
       routes:
-        - id: test_route
-          uri: https://www.baidu.com
+        - id: admin
+          uri: lb://admin
           predicates:
-            #访问路径：localhost:88/hello?url=baidu 代表跳转到www.baidu.com/hello
-            #url带有baidu的自动跳转到https://www.baidu.com
-            - Query=url,baidu
+            - Path=/admin/**
+          filters:
+            -  # 0：不对路径做任何处理 1：对路径切除一级处理
+            - StripPrefix=1
+
 server:
   port: 9527
 
