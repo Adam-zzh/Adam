@@ -11,7 +11,7 @@ spring:
           predicates:
             - Path=/admin/**
           filters:
-            -  # 0：不对路径做任何处理 1：对路径切除一级处理
+            # 0：不对路径做任何处理 1：对路径切除一级处理
             - StripPrefix=1
 
 server:
