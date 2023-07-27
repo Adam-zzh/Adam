@@ -3,6 +3,7 @@ package com.huamiao.common.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * Spring工具类
  * Created by zzh on 2020/3/3.
  */
-@Component
+@Configuration
 public class ApplicationUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;

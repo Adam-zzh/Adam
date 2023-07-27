@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -27,8 +28,8 @@ public class TestController {
     @PostMapping("token")
     @ApiOperation("测试request")
     public ResponseVo<Object> testToken(HttpServletRequest request){
-        Object authorization = request.getAttribute("Authorization");
-        System.out.println(authorization.toString());
+        Enumeration<String> attributeNames = request.getHeaderNames();
+        System.out.println(request.getHeader("Authorization"));
         return ResponseVo.success(JSONObject.toJSONString(UserSession.getUser()));
     }
 

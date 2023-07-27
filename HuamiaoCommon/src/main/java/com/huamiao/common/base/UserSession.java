@@ -3,6 +3,7 @@ package com.huamiao.common.base;
 import com.huamiao.common.exception.Asserts;
 import com.huamiao.common.util.RedisHelper;
 import com.huamiao.common.util.ServletHelper;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,8 +29,10 @@ public class UserSession
 
     public static User getUser(){
         HttpServletRequest request = ServletHelper.getRequest();
-
-        return getUser(request.getHeader("Authorization"));
+        String authorization = request.getHeader("Authorization");
+        Assert.notNull(authorization, "用户身份失效, 请重新登陆");
+        String token = authorization.replaceFirst("(\\w+\\s)+?", "");
+        return getUser(token);
     }
 
     public static void clear(String token){
