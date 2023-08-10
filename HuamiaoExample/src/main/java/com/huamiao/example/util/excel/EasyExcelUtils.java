@@ -5,7 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.huamiao.example.enums.excel.ExcelPageEnum;
-import com.huamiao.example.function.excel.MybatisPlusPageQueryService;
+import com.huamiao.example.function.excel.MybatisPlusPageQueryFunction;
 
 /**
  * 〈导出excel工具类〉
@@ -27,7 +27,7 @@ public class EasyExcelUtils extends EasyExcel {
     public static void pageWrite(ExcelWriter excelWriter,
                                  String sheetName,
                                  long totalCount,
-                                 MybatisPlusPageQueryService pageQueryService) {
+                                 MybatisPlusPageQueryFunction pageQueryService) {
 
         // default export xlsx, page size 10000, sheet max row 1000000
         int pageSize = ExcelPageEnum.XLSX.getPageSize();

@@ -3,7 +3,7 @@ package com.huamiao.example.function.excel;
 import java.util.List;
 
 @FunctionalInterface
-public interface MybatisPlusPageQueryService<E> {
+public interface MybatisPlusPageQueryFunction<E> {
 
     /**
      * @description: 获取分页查询数据
