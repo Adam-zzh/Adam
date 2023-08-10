@@ -3,7 +3,7 @@ package com.huamiao.example.controller;
 import com.alibaba.excel.exception.ExcelAnalysisException;
 import com.huamiao.common.entity.ResponseVo;
 import com.huamiao.common.exception.ImportExcelException;
-import com.huamiao.example.service.excel.ExcelService;
+import com.huamiao.example.service.excel.ExampleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ExcelTestController {
 
     @Autowired
-    private ExcelService excelService;
+    private ExampleService excelService;
 
     @PostMapping("/importBankFlow")
     @ApiOperation(value = "导入订单", notes = "导入订单")
