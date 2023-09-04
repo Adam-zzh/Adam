@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 public class NIOService {
+    
+    private static final int port = 8000;
 
     static class MultiThreadEchoServer{
 
@@ -72,10 +74,11 @@ public class NIOService {
             selector = SelectorProvider.provider().openSelector();
             ServerSocketChannel ssc = ServerSocketChannel.open();
             ssc.configureBlocking(false);
-            ssc.bind(new InetSocketAddress("localhost", 8000));
+            ssc.bind(new InetSocketAddress("localhost", port));
             ssc.register(selector, SelectionKey.OP_ACCEPT);
 
             for (;;){
+                if (!selector.isOpen()) break;
                 selector.select();
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = selectionKeys.iterator();
@@ -126,13 +129,17 @@ public class NIOService {
             }
         }
 
-        private void doRead(SelectionKey selectionKey) throws IOException {
-            SocketChannel channel = (SocketChannel) selectionKey.channel();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(8192);
-            channel.read(byteBuffer);
-            System.out.println("客户端请求数据：" + new String(byteBuffer.array()).trim());
-            byteBuffer.flip();
-            executorService.execute(new HandleMessage(selectionKey, byteBuffer));
+        private void doRead(SelectionKey selectionKey) {
+            try{
+                SocketChannel channel = (SocketChannel) selectionKey.channel();
+                ByteBuffer byteBuffer = ByteBuffer.allocate(8192);
+                channel.read(byteBuffer);
+                System.out.println("客户端请求数据：" + new String(byteBuffer.array()).trim());
+                byteBuffer.flip();
+                executorService.execute(new HandleMessage(selectionKey, byteBuffer));
+            }catch (Exception e){
+                log.warn("读取客户端数据异常", e);
+            }
         }
 
         private void doAccept(SelectionKey selectionKey) throws IOException {
@@ -151,6 +158,65 @@ public class NIOService {
             new MultiThreadEchoServer().startUp();
         }
 
+    }
+
+    static class NIOClient {
+
+        private Selector selector;
+
+        public void init() throws IOException {
+            selector = SelectorProvider.provider().openSelector();
+            SocketChannel client = SocketChannel.open();
+            client.configureBlocking(false);
+            client.connect(new InetSocketAddress("localhost", port));
+            client.register(selector, SelectionKey.OP_CONNECT);
+        }
+
+        public void working() throws IOException {
+            while (true){
+                if (!selector.isOpen())
+                    break;
+                selector.select();
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Iterator<SelectionKey> iter = selectionKeys.iterator();
+                while (iter.hasNext()){
+                    SelectionKey selectionKey = iter.next();
+                    iter.remove();
+                    if (selectionKey.isConnectable()){
+                        connect(selectionKey);
+                    }
+                    if (selectionKey.isReadable()){
+                        read(selectionKey);
+                    }
+                }
+            }
+
+        }
+
+        private void read(SelectionKey selectionKey) throws IOException {
+            SocketChannel channel = (SocketChannel) selectionKey.channel();
+            ByteBuffer bb = ByteBuffer.allocate(16);
+            channel.read(bb);
+            System.out.println(new String(bb.array()).trim());
+        }
+
+        private void connect(SelectionKey selectionKey) throws IOException {
+            SocketChannel channel = (SocketChannel) selectionKey.channel();
+            if (channel.isConnectionPending()) channel.finishConnect();
+
+            channel.configureBlocking(false);
+            for (int i = 0; i < 100; i++) {
+                channel.write(ByteBuffer.wrap(("give you a big house"+i).getBytes()));
+            }
+
+            channel.register(selector, SelectionKey.OP_READ);
+        }
+
+        public static void main(String[] args) throws IOException {
+            NIOClient client = new NIOClient();
+            client.init();
+            client.working();
+        }
     }
 
 }
