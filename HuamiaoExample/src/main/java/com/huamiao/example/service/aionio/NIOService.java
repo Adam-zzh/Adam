@@ -195,7 +195,7 @@ public class NIOService {
 
         private void read(SelectionKey selectionKey) throws IOException {
             SocketChannel channel = (SocketChannel) selectionKey.channel();
-            ByteBuffer bb = ByteBuffer.allocate(16);
+            ByteBuffer bb = ByteBuffer.allocate(1024 * 8);
             channel.read(bb);
             System.out.println(new String(bb.array()).trim());
         }
@@ -206,7 +206,7 @@ public class NIOService {
 
             channel.configureBlocking(false);
             for (int i = 0; i < 100; i++) {
-                channel.write(ByteBuffer.wrap(("give you a big house"+i).getBytes()));
+                channel.write(ByteBuffer.wrap(("give you a big house" + i + "\r\n").getBytes()));
             }
 
             channel.register(selector, SelectionKey.OP_READ);
